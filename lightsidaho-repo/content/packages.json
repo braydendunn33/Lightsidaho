@@ -1,0 +1,40 @@
+{
+  "packages": [
+    {
+      "title": "Roofline Glow",
+      "price_from": 579,
+      "blurb": "Front roofline \u2022 1\u2011story",
+      "includes": [
+        "Warm white C9 LEDs (color available)",
+        "Custom\u2011cut to your home",
+        "Outdoor timer included",
+        "Install, maintenance & takedown"
+      ],
+      "cta": "Book & Save $100"
+    },
+    {
+      "title": "Peak & Porch",
+      "price_from": 879,
+      "blurb": "Roofline + ridges/peaks",
+      "includes": [
+        "Everything in Roofline Glow",
+        "Accents on peaks or porch lines",
+        "2\u2011story adders priced fairly",
+        "Optional wreath or tree wrap"
+      ],
+      "cta": "Check Availability"
+    },
+    {
+      "title": "Winter Wonderland",
+      "price_from": 1299,
+      "blurb": "Full roofline + landscape",
+      "includes": [
+        "Roofline + ridges/peaks",
+        "2\u20133 trees/shrubs or walkway stakes",
+        "Smart plug upgrade available",
+        "Priority service & maintenance"
+      ],
+      "cta": "Reserve My Slot"
+    }
+  ]
+}
