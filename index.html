@@ -183,7 +183,7 @@
 
     if(testi && Array.isArray(testi.testimonials)){
       const t = $('testimonials');
-      t.innerHTML = testi.testimonials.map x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
+      t.innerHTML = testi.testimonials.map(x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
     }
 
     $('y').textContent = new Date().getFullYear();
