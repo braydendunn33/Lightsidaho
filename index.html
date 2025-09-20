@@ -17,9 +17,11 @@
 
       /* easy knobs */
       --logo-desktop: 240px;   /* desktop logo height */
-      --logo-mobile-w: 64vw;   /* mobile logo width (centered) */
-      --h1-max: 42px;
-      --badge-font: 0.95rem;
+      --logo-mobile-w: 70vw;   /* mobile logo width (centered) */
+      --logo-trim-d: -46px;    /* trim top/bottom on desktop */
+      --logo-trim-m: -66px;    /* trim top/bottom on mobile */
+      --h1-max: 42px;          /* max size of H1 */
+      --badge-font: 0.95rem;   /* locations pill size */
       --badge-pad-y: 6px;
       --badge-pad-x: 12px;
     }
@@ -28,24 +30,32 @@
     html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
     a{color:var(--accent);text-decoration:none}
 
-    header{
-      position:sticky;top:0;z-index:50;
-      background:rgba(10,15,28,.7);
+    /* ===== Header with optional background image ===== */
+    .header-hero{
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(10,15,28,.7); /* fallback color */
+      border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:saturate(130%) blur(8px);
-      border-bottom:1px solid rgba(255,255,255,.06)
+      background-image: var(--header-bg, none); /* set by JS from CMS */
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+    }
+    .header-overlay{
+      position: absolute; inset: 0; z-index: 1;
+      background: rgba(0,0,0,.35); /* darken photo so logo/buttons pop */
+      pointer-events: none;
     }
 
     .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
-    /* compact header */
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:0}
+    /* compact header bar */
+    .nav{position:relative; z-index:2; display:flex;align-items:center;justify-content:space-between;padding:0}
     .logo-wrap{display:flex;align-items:center;gap:0}
 
-    /* BIG logo, shaved top/bottom space */
+    /* BIG logo, minimal vertical cushion */
     .logo{
       height:var(--logo-desktop);
       width:auto; display:block;
-      margin-block:-46px; /* trims any transparent pixels so the header is tight */
+      margin-block: var(--logo-trim-d);
     }
 
     header .cta{gap:10px;flex-wrap:wrap}
@@ -101,14 +111,19 @@
     @media (max-width:780px){
       .nav{flex-direction:column;align-items:center;gap:6px;padding:2px 0}
       .logo-wrap{width:100%;justify-content:center}
-      .logo{width:var(--logo-mobile-w);height:auto;margin-block:-66px}
+      .logo{
+        width:var(--logo-mobile-w);
+        height:auto;
+        margin-block: var(--logo-trim-m);
+      }
       .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
       .hero{padding-top:12px}
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="header-hero">
+    <div class="header-overlay"></div>
     <div class="container nav">
       <div class="logo-wrap">
         <!-- Only the logo; name text removed -->
@@ -191,16 +206,24 @@
   function attr(el,name,val){ if(el && val) el.setAttribute(name,val); }
 
   async function init(){
-    const site = await j('/content/site.json');
-    const pkgs = await j('/content/packages.json');
-    const faq  = await j('/content/faq.json');
-    const testi= await j('/content/testimonials.json');
-    const gal  = await j('/content/gallery.json');
+    const site  = await j('/content/site.json');
+    const pkgs  = await j('/content/packages.json');
+    const faq   = await j('/content/faq.json');
+    const testi = await j('/content/testimonials.json');
+    const gal   = await j('/content/gallery.json');
 
     if(site){
-      // name in header removed on purpose; footer still uses it:
+      // footer name & header assets
       text($('business_name_footer'), site.business_name);
       attr($('logo'), 'src', site.logo || '/uploads/logo.png');
+
+      // header background image from CMS (Business Settings → Header Background)
+      const headerEl = document.querySelector('.header-hero');
+      if (headerEl && site.header_bg) {
+        headerEl.style.setProperty('--header-bg', `url(${site.header_bg})`);
+      }
+
+      // copy over text fields
       text($('hero_headline'), site.hero_headline);
       text($('hero_subheadline'), site.hero_subheadline);
       text($('hero_offer'), site.hero_offer);
@@ -208,11 +231,13 @@
       text($('footer_line'), site.footer_line);
       text($('areas'), (site.areas||[]).join(' • '));
       text($('header_cta_label'), site.header_cta_label);
+
+      // phone links
       const phoneHref = site.phone_href ? 'tel:'+site.phone_href : '';
       const smsHref   = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
-      if(phoneHref){ $('header_cta_secondary') && $('header_cta_secondary').setAttribute('href', phoneHref); }
-      if(smsHref){   $('sms_link') && $('sms_link').setAttribute('href', smsHref); }
-      $('header_cta_secondary') && ( $('header_cta_secondary').textContent = site.header_cta_secondary || $('header_cta_secondary').textContent );
+      if(phoneHref){ $('header_cta_secondary')?.setAttribute('href', phoneHref); }
+      if(smsHref){   $('sms_link')?.setAttribute('href', smsHref); }
+      if (site.header_cta_secondary) $('header_cta_secondary').textContent = site.header_cta_secondary;
     }
 
     if(pkgs && Array.isArray(pkgs.packages)){
@@ -245,10 +270,12 @@
   }
   init();
 
+  // Identity invite redirect
   if (location.hash && location.hash.startsWith('#/invite')) {
     location.href = '/admin/' + location.hash;
   }
 
+  // After login, send user to /admin/
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', (user) => {
       if (!user) {
