@@ -8,23 +8,71 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <!-- Netlify Identity widget so invite links & login work anywhere -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <style>
-    :root{--bg:#0b1220;--bg2:#0f1a33;--brand:#0ea5e9;--accent:#22d3ee;--text:#e5f0ff;--muted:#98a6bd;--card:#0e162b;--xmasRed:#ef4444;--xmasGreen:#22c55e;--gold:#facc15}
-    *{box-sizing:border-box}html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    :root{
+      --bg:#0b1220; --bg2:#0f1a33; --brand:#0ea5e9; --accent:#22d3ee; --text:#e5f0ff; --muted:#98a6bd; --card:#0e162b;
+      --xmasRed:#ef4444; --xmasGreen:#22c55e; --gold:#facc15;
+
+      /* easy tweak knobs */
+      --logo-desktop: 200px;      /* desktop logo height */
+      --logo-mobile-w: 50vw;      /* mobile logo width (~half screen) */
+      --h1-max: 42px;             /* max size of the big H1 */
+      --badge-font: 0.95rem;      /* size of locations pill */
+      --badge-pad-y: 6px;         /* pill vertical padding */
+      --badge-pad-x: 12px;        /* pill horizontal padding */
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
     a{color:var(--accent);text-decoration:none}
-    header{position:sticky;top:0;z-index:50;background:rgba(10,15,28,.7);backdrop-filter:saturate(130%) blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(10,15,28,.7);
+      backdrop-filter:saturate(130%) blur(8px);
+      border-bottom:1px solid rgba(255,255,255,.06)
+    }
+
     .container{max-width:1100px;margin:0 auto;padding:0 20px}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+
+    /* compact header */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
     .logo-wrap{display:flex;align-items:center;gap:12px}
-    .logo{height:52px;width:auto;display:block}
+
+    /* BIG logo (desktop) */
+    .logo{
+      height:var(--logo-desktop);
+      width:auto; display:block;
+      margin-top:-10px;  /* trims transparent pixels if the PNG has them */
+      margin-bottom:-10px;
+    }
+
+    header .cta{gap:10px;flex-wrap:wrap}
     .btn{display:inline-block;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen));color:#052030;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 18px rgba(239,68,68,.15),0 2px 8px rgba(34,197,94,.15)}
     .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:56px 0}
+
+    /* hero layout */
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:18px 0 32px}
     @media (max-width:900px){.hero{grid-template-columns:1fr}}
-    .hero h1{font-size:clamp(28px,4vw,48px);line-height:1.1;margin:12px 0 10px}
-    .hero p{color:var(--muted);font-size:1.05rem}
+
+    /* locations pill */
+    .badge{
+      display:inline-block;
+      font-size:var(--badge-font);
+      padding:var(--badge-pad-y) var(--badge-pad-x);
+      margin:4px 0 14px 0;        /* space below pill so H1 breathes */
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+    }
+
+    /* H1 a bit smaller & tighter */
+    .hero h1{font-size:clamp(26px,3.3vw,var(--h1-max));line-height:1.08;margin:6px 0 10px}
+    .hero p{color:var(--muted);font-size:1.02rem;margin-top:4px}
+
     .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
     .grid{display:grid;gap:16px}
     .grid.cols-3{grid-template-columns:repeat(3,1fr)}
@@ -32,7 +80,6 @@
     h2{font-size:clamp(22px,3vw,34px);margin:8px 0 6px}
     .muted{color:var(--muted)}
     .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .badge{font-size:.85rem;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
     .section{padding:44px 0}
     .price{font-size:28px;font-weight:800}
     .from{color:var(--muted);font-size:.9rem}
@@ -48,51 +95,17 @@
     .disclaimer{font-size:.85rem;color:#a7b5cc}
     footer{padding:40px 0;color:#9db4d6}
 
-    /* ===== Header logo & spacing (compact) ===== */
-    .nav { padding: 0px 0; }                /* almost no header cushion */
-
-    .logo {
-      height: 220px;                        /* adjust this for desktop */
-      width: auto;
-      display: block;
-      margin-top: -28px;                     /* trims transparent pixels in PNG */
-      margin-bottom: -28px;
+    /* responsive tweaks */
+    @media (max-width:1100px){
+      .logo{height:170px;margin-top:-8px;margin-bottom:-8px}
     }
-
-    header .cta { gap: 8px; flex-wrap: wrap; }
-
-    /* Tablet */
-    @media (max-width: 1100px) {
-      .logo { height: 180px; margin-top: -6px; margin-bottom: -6px; }
+    @media (max-width:780px){
+      .nav{flex-direction:column;align-items:flex-start;gap:8px;padding:6px 0}
+      /* mobile: make logo half the screen width */
+      .logo{width:var(--logo-mobile-w);height:auto;margin-top:-4px;margin-bottom:-4px}
+      .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
+      .hero{padding-top:14px}
     }
-    /* Phone */
-    @media (max-width: 780px) {
-      .nav { padding: 4px 0; flex-direction: column; align-items: flex-start; gap: 8px; }
-      .logo { height: 68px; margin-top: -4px; margin-bottom: -4px; }
-    }
-
-    /* Tighten space under the header */
-    .hero { padding: 20px 0 28px; }
-    .hero h1 { margin-top: 0; }
-
-    /* -- Locations pill (less clutter) -- */
-.hero .badge{
-  font-size: .82rem;        /* a touch smaller */
-  padding: 4px 10px;        /* slimmer pill */
-  margin-top: 18px;
-  margin-bottom: 18px;      /* space before the H1 */
-  border-radius: 999px;
-  background: rgba(255,255,255,.06);
-  border-color: rgba(255,255,255,.10);
-}
-
-/* tighten the text stack below it */
-.hero h1{ margin-top: 0; margin-bottom: 8px; line-height: 1.05; }
-.hero p.muted{ margin-top: 4px; }
-@media (max-width: 780px){
-  .hero .badge{ font-size: .78rem; margin-bottom: 10px; }
-}
-
   </style>
 </head>
 <body>
@@ -114,10 +127,11 @@
       <div>
         <span class="badge" id="areas">Boise • Meridian • Nampa • Kuna • Eagle • Caldwell</span>
         <h1 id="hero_headline">Pro Christmas Light Installation across Boise–Meridian–Nampa</h1>
-        <p id="hero_subheadline" class="muted">Lease premium C9 LEDs on custom-cut lines for a perfect fit...</p>
+        <p id="hero_subheadline" class="muted">Lease premium C9 LEDs on custom-cut lines for a perfect fit. Our full-service packages include design, installation, in-season maintenance, takedown, and optional storage.</p>
         <p><strong id="hero_offer">Book by Oct 15 & save $100</strong></p>
         <div class="badges" id="badges"></div>
       </div>
+
       <div class="card">
         <h2 id="quote">Instant Estimate</h2>
         <p class="muted">Text us your address and a photo of the front of your home for a fast quote, or use this form.</p>
@@ -172,7 +186,7 @@
 
   <script>
   const $ = (id) => document.getElementById(id);
-  const j = async (p) => {try{const r=await fetch(p); if(!r.ok) return null; return await r.json();}catch(e){return null;}};
+  const j = async (p) => { try { const r = await fetch(p); if (!r.ok) return null; return await r.json(); } catch(e){ return null; } };
 
   function text(el,val){ if(el && val!==undefined) el.textContent = val; }
   function attr(el,name,val){ if(el && val) el.setAttribute(name,val); }
@@ -180,14 +194,14 @@
   async function init(){
     const site = await j('/content/site.json');
     const pkgs = await j('/content/packages.json');
-    const faq = await j('/content/faq.json');
-    const testi = await j('/content/testimonials.json');
-    const gal = await j('/content/gallery.json');
+    const faq  = await j('/content/faq.json');
+    const testi= await j('/content/testimonials.json');
+    const gal  = await j('/content/gallery.json');
 
     if(site){
       text($('business_name'), site.business_name);
       text($('business_name_footer'), site.business_name);
-      attr($('logo'), 'src', site.logo || '/uploads/logo.png');  // fallback; works with Netlify rewrite
+      attr($('logo'), 'src', site.logo || '/uploads/logo.png');
       text($('hero_headline'), site.hero_headline);
       text($('hero_subheadline'), site.hero_subheadline);
       text($('hero_offer'), site.hero_offer);
@@ -196,15 +210,14 @@
       text($('areas'), (site.areas||[]).join(' • '));
       text($('header_cta_label'), site.header_cta_label);
       const phoneHref = site.phone_href ? 'tel:'+site.phone_href : '';
-      const smsHref = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
+      const smsHref   = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
       if(phoneHref){ attr($('header_cta_secondary'), 'href', phoneHref); }
-      if(smsHref){ attr($('sms_link'), 'href', smsHref); }
+      if(smsHref){   attr($('sms_link'), 'href', smsHref); }
       text($('header_cta_secondary'), site.header_cta_secondary);
     }
 
     if(pkgs && Array.isArray(pkgs.packages)){
-      const el = $('packages_wrap');
-      el.innerHTML = pkgs.packages.map(p => `
+      $('packages_wrap').innerHTML = pkgs.packages.map(p => `
         <div class="card">
           <h3>${p.title||''}</h3>
           <div class="price">From $${p.price_from||''}</div>
@@ -215,33 +228,28 @@
     }
 
     if(gal && Array.isArray(gal.images)){
-      const g = $('gallery');
-      g.innerHTML = gal.images.map(it => `
+      $('gallery').innerHTML = gal.images.map(it => `
         <figure title="${it.label||''}">
           ${it.image ? `<img src="${it.image}" alt="${it.label||'Gallery'}">` : it.label||'Image'}
         </figure>`).join('');
     }
 
     if(faq && Array.isArray(faq.faqs)){
-      const wrap = $('faq_wrap');
-      wrap.innerHTML = faq.faqs.map(q => `<div class="card"><h3>${q.q||''}</h3><p class="muted">${q.a||''}</p></div>`).join('');
+      $('faq_wrap').innerHTML = faq.faqs.map(q => `<div class="card"><h3>${q.q||''}</h3><p class="muted">${q.a||''}</p></div>`).join('');
     }
 
     if(testi && Array.isArray(testi.testimonials)){
-      const t = $('testimonials');
-      t.innerHTML = testi.testimonials.map(x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
+      $('testimonials').innerHTML = testi.testimonials.map(x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
     }
 
     $('y').textContent = new Date().getFullYear();
   }
   init();
 
-  // If an invite link lands on the homepage (/#/invite/...), forward it to /admin/ so the CMS completes signup
   if (location.hash && location.hash.startsWith('#/invite')) {
     location.href = '/admin/' + location.hash;
   }
 
-  // After login, send user to /admin/
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', (user) => {
       if (!user) {
