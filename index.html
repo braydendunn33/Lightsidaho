@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Netlify Identity (for CMS login/invite) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <style>
@@ -16,14 +17,14 @@
       --xmasRed:#ef4444; --xmasGreen:#22c55e; --gold:#facc15;
 
       /* easy knobs */
-      --logo-desktop: 384px;   /* desktop logo height (you set this) */
-      --logo-trim-d: -56px;    /* desktop trim (more negative = less space) */
+      --logo-desktop: 384px;   /* desktop logo height */
+      --logo-trim-d: -56px;    /* top/bottom trim (desktop); more negative = tighter */
 
-      --logo-mobile-w: 70vw;   /* mobile logo width */
+      --logo-mobile-w: 70vw;   /* mobile logo width (centered) */
       --logo-top-m: 18px;      /* push logo DOWN on mobile */
       --logo-bottom-m: -84px;  /* tighten space under logo on mobile */
 
-      --h1-max: 42px;
+      --h1-max: 42px;          /* max H1 size */
       --badge-font: 0.95rem;
       --badge-pad-y: 6px;
       --badge-pad-x: 12px;
@@ -33,18 +34,18 @@
     html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
     a{color:var(--accent);text-decoration:none}
 
-    /* ===== Header with optional background image ===== */
+    /* ===== Header with optional background image (NOT sticky) ===== */
     .header-hero{
-      position: relative; /* not sticky anymore */
-      background: rgba(10,15,28,.7);
+      position: relative; /* scrolls with page */
+      background: rgba(10,15,28,.7); /* fallback if no image */
       border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:saturate(130%) blur(8px);
-      background-image: var(--header-bg, none);
+      background-image: var(--header-bg, none); /* set by JS from CMS */
       background-size: cover; background-position: center; background-repeat: no-repeat;
     }
     .header-overlay{
       position: absolute; inset: 0; z-index: 1;
-      background: rgba(0,0,0,.35);
+      background: rgba(0,0,0,.35); /* darken photo so logo/buttons pop */
       pointer-events: none;
     }
 
@@ -62,7 +63,12 @@
     }
 
     header .cta{gap:10px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen));color:#052030;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 18px rgba(239,68,68,.15),0 2px 8px rgba(34,197,94,.15)}
+    .btn{
+      display:inline-block;padding:12px 18px;border-radius:12px;
+      background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen));
+      color:#052030;font-weight:800;letter-spacing:.3px;
+      box-shadow:0 6px 18px rgba(239,68,68,.15),0 2px 8px rgba(34,197,94,.15)
+    }
     .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
 
     /* hero layout */
@@ -85,7 +91,10 @@
     .hero h1{font-size:clamp(26px,3.3vw,var(--h1-max));line-height:1.08;margin:6px 0 10px}
     .hero p{color:var(--muted);font-size:1.02rem;margin-top:4px}
 
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px
+    }
     .grid{display:grid;gap:16px}
     .grid.cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.grid.cols-3{grid-template-columns:1fr}}
@@ -107,7 +116,7 @@
     .disclaimer{font-size:.85rem;color:#a7b5cc}
     footer{padding:40px 0;color:#9db4d6}
 
-    /* Floating CTA button */
+    /* Floating CTA button (desktop right; mobile centered) */
     .floating-cta{
       position:fixed; right:16px; bottom:16px; z-index:60;
       display:inline-flex; align-items:center; gap:10px;
@@ -119,59 +128,68 @@
     }
     .floating-cta.hidden{ opacity:0; transform:translateY(16px); pointer-events:none; }
 
-    @media (max-width:780px){
-      .nav{flex-direction:column;align-items:center;gap:6px;padding:2px 0}
-      .logo-wrap{width:100%;justify-content:center}
-      .logo{
-        width: var(--logo-mobile-w);
-        height: auto;
-        margin-top: var(--logo-top-m);
-        margin-bottom: var(--logo-bottom-m);
-      }
-      .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
-      .hero{padding-top:16px}
-      .floating-cta{ right:14px; bottom:14px; padding:12px 14px; }
-    }
-
-    /* ===== Snowflakes (lightweight) ===== */
+    /* ===== Snowflakes (fixed overlay) ===== */
     .snowflakes{
       pointer-events:none; position:fixed; inset:0; z-index:40; /* above content, below CTA */
       overflow:hidden;
     }
     .snowflake{
-      position:absolute; top:-2rem;
-      font-size:1.1rem; opacity:.8; will-change: transform;
-      animation-name: snow-fall, snow-drift;
-      animation-timing-function: linear, ease-in-out;
-      animation-iteration-count: infinite, infinite;
+      position:absolute;
+      top:-2rem;             /* start just above the viewport */
+      font-size:1.1rem;
+      color:#fff;
+      opacity:.85;
+      will-change: top, transform;
+      animation: snow-fall linear infinite, snow-drift ease-in-out infinite;
     }
-    @keyframes snow-fall{
-      0%   { transform: translateY(-2rem); }
-      100% { transform: translateY(110vh); }
-    }
-    @keyframes snow-drift{
-      0%,100%{ transform: translateX(0); }
-      50%    { transform: translateX(18px); }
-    }
+    @keyframes snow-fall{ from{ top:-2rem; } to{ top:110vh; } }
+    @keyframes snow-drift{ 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(18px); } }
+
     /* sprinkle positions/delays for ~14 flakes */
-    .snowflake:nth-child(1){ left: 5%;  animation-duration: 11s, 5s; animation-delay: 0s, .5s;}
-    .snowflake:nth-child(2){ left: 15%; animation-duration: 13s, 6s; animation-delay: 2s, 0s;}
+    .snowflake:nth-child(1){ left: 5%;  animation-duration: 11s, 5s;   animation-delay: 0s, .5s;}
+    .snowflake:nth-child(2){ left: 15%; animation-duration: 13s, 6s;   animation-delay: 2s, 0s;}
     .snowflake:nth-child(3){ left: 25%; animation-duration: 12s, 4.5s; animation-delay: 1s, .2s;}
     .snowflake:nth-child(4){ left: 35%; animation-duration: 10s, 5.2s; animation-delay: 3s, .3s;}
     .snowflake:nth-child(5){ left: 45%; animation-duration: 14s, 6.5s; animation-delay: .5s, .4s;}
     .snowflake:nth-child(6){ left: 55%; animation-duration: 12.5s, 6s; animation-delay: 1.5s, .7s;}
     .snowflake:nth-child(7){ left: 65%; animation-duration: 11.5s, 5.5s; animation-delay: 2.5s, .1s;}
     .snowflake:nth-child(8){ left: 75%; animation-duration: 13.5s, 6.2s; animation-delay: .8s, .6s;}
-    .snowflake:nth-child(9){ left: 85%; animation-duration: 12s, 5.8s; animation-delay: 1.2s, .4s;}
-    .snowflake:nth-child(10){left: 50%; animation-duration: 15s, 7s; animation-delay: .3s, .9s;}
+    .snowflake:nth-child(9){ left: 85%; animation-duration: 12s, 5.8s;  animation-delay: 1.2s, .4s;}
+    .snowflake:nth-child(10){left: 50%; animation-duration: 15s, 7s;   animation-delay: .3s, .9s;}
     .snowflake:nth-child(11){left: 30%; animation-duration: 16s, 7.2s; animation-delay: 1.8s, .5s;}
-    .snowflake:nth-child(12){left: 10%; animation-duration: 14.5s, 6.8s; animation-delay: .6s, .8s;}
-    .snowflake:nth-child(13){left: 90%; animation-duration: 13.2s, 6.1s; animation-delay: 2.2s, .6s;}
-    .snowflake:nth-child(14){left: 70%; animation-duration: 12.8s, 5.9s; animation-delay: .9s, .2s;}
+    .snowflake:nth-child(12){left: 10%; animation-duration: 14.5s,6.8s; animation-delay: .6s, .8s;}
+    .snowflake:nth-child(13){left: 90%; animation-duration: 13.2s,6.1s; animation-delay: 2.2s, .6s;}
+    .snowflake:nth-child(14){left: 70%; animation-duration: 12.8s,5.9s; animation-delay: .9s, .2s;}
 
-    /* reduce snow density on very small screens if needed */
-    @media (max-width:420px){
-      .snowflake{ opacity:.7; font-size:1rem; }
+    /* responsive tweaks */
+    @media (max-width:1100px){
+      .logo{height:320px;margin-block:-26px}
+    }
+    @media (max-width:780px){
+      .nav{flex-direction:column;align-items:center;gap:6px;padding:2px 0}
+      .logo-wrap{width:100%;justify-content:center}
+      .logo{
+        width: var(--logo-mobile-w);
+        height: auto;
+        margin-top: var(--logo-top-m);       /* push DOWN */
+        margin-bottom: var(--logo-bottom-m); /* tighten space under */
+      }
+      .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
+      .hero{padding-top:16px}
+
+      /* center the floating CTA on phones */
+      .floating-cta{ left:50%; right:auto; bottom:14px; transform:translateX(-50%); }
+      .floating-cta.hidden{ transform: translate(-50%, 16px); }
+
+      /* (optional) lighten snow on tiny phones */
+      @media (max-width:420px){
+        .snowflake{ opacity:.75; font-size:1rem; }
+      }
+    }
+
+    /* Respect users who prefer less motion */
+    @media (prefers-reduced-motion: reduce){
+      .snowflake{ animation: none; }
     }
   </style>
 </head>
@@ -342,12 +360,10 @@
   }
   init();
 
-  // Identity invite redirect
+  // Netlify Identity: forward invite hashes to /admin/, and send logged-in users there
   if (location.hash && location.hash.startsWith('#/invite')) {
     location.href = '/admin/' + location.hash;
   }
-
-  // After login, send user to /admin/
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', (user) => {
       if (!user) {
