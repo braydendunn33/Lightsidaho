@@ -1,2 +1,7 @@
 [build]
   publish = "."
+
+[[redirects]]
+  from = "/uploads/*"
+  to = "/static/uploads/:splat"
+  status = 200
