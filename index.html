@@ -47,6 +47,15 @@
     input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1426;color:var(--text)}
     .disclaimer{font-size:.85rem;color:#a7b5cc}
     footer{padding:40px 0;color:#9db4d6}
+
+    /* ===== Bigger header logo & responsive tweaks ===== */
+    .logo { height: 120px; width: auto; }
+    header .cta { gap: 10px; flex-wrap: wrap; }
+    @media (max-width: 1100px) { .logo { height: 96px; } }
+    @media (max-width: 780px) {
+      .nav { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .logo { height: 72px; }
+    }
   </style>
 </head>
 <body>
@@ -141,7 +150,7 @@
     if(site){
       text($('business_name'), site.business_name);
       text($('business_name_footer'), site.business_name);
-      attr($('logo'), 'src', site.logo || '/uploads/logo.png');
+      attr($('logo'), 'src', site.logo || '/uploads/logo.png');  // fallback path
       text($('hero_headline'), site.hero_headline);
       text($('hero_subheadline'), site.hero_subheadline);
       text($('hero_offer'), site.hero_offer);
@@ -199,9 +208,7 @@
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', (user) => {
       if (!user) {
-        window.netlifyIdentity.on('login', () => {
-          document.location.href = '/admin/';
-        });
+        window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
       }
     });
   }
