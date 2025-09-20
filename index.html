@@ -15,13 +15,13 @@
       --bg:#0b1220; --bg2:#0f1a33; --brand:#0ea5e9; --accent:#22d3ee; --text:#e5f0ff; --muted:#98a6bd; --card:#0e162b;
       --xmasRed:#ef4444; --xmasGreen:#22c55e; --gold:#facc15;
 
-      /* easy tweak knobs */
-      --logo-desktop: 200px;      /* desktop logo height */
-      --logo-mobile-w: 50vw;      /* mobile logo width (~half screen) */
-      --h1-max: 42px;             /* max size of the big H1 */
-      --badge-font: 0.95rem;      /* size of locations pill */
-      --badge-pad-y: 6px;         /* pill vertical padding */
-      --badge-pad-x: 12px;        /* pill horizontal padding */
+      /* easy knobs */
+      --logo-desktop: 240px;   /* desktop logo height */
+      --logo-mobile-w: 64vw;   /* mobile logo width (centered) */
+      --h1-max: 42px;
+      --badge-font: 0.95rem;
+      --badge-pad-y: 6px;
+      --badge-pad-x: 12px;
     }
 
     *{box-sizing:border-box}
@@ -38,15 +38,14 @@
     .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
     /* compact header */
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
-    .logo-wrap{display:flex;align-items:center;gap:12px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:0}
+    .logo-wrap{display:flex;align-items:center;gap:0}
 
-    /* BIG logo (desktop) */
+    /* BIG logo, shaved top/bottom space */
     .logo{
       height:var(--logo-desktop);
       width:auto; display:block;
-      margin-top:-10px;  /* trims transparent pixels if the PNG has them */
-      margin-bottom:-10px;
+      margin-block:-18px; /* trims any transparent pixels so the header is tight */
     }
 
     header .cta{gap:10px;flex-wrap:wrap}
@@ -54,7 +53,7 @@
     .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
 
     /* hero layout */
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:18px 0 32px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:14px 0 32px}
     @media (max-width:900px){.hero{grid-template-columns:1fr}}
 
     /* locations pill */
@@ -62,14 +61,14 @@
       display:inline-block;
       font-size:var(--badge-font);
       padding:var(--badge-pad-y) var(--badge-pad-x);
-      margin:4px 0 14px 0;        /* space below pill so H1 breathes */
+      margin:6px 0 14px 0;
       border-radius:999px;
       background:rgba(255,255,255,.08);
       border:1px solid rgba(255,255,255,.12);
       color:var(--text);
     }
 
-    /* H1 a bit smaller & tighter */
+    /* H1 size & spacing */
     .hero h1{font-size:clamp(26px,3.3vw,var(--h1-max));line-height:1.08;margin:6px 0 10px}
     .hero p{color:var(--muted);font-size:1.02rem;margin-top:4px}
 
@@ -97,14 +96,14 @@
 
     /* responsive tweaks */
     @media (max-width:1100px){
-      .logo{height:170px;margin-top:-8px;margin-bottom:-8px}
+      .logo{height:200px;margin-block:-14px}
     }
     @media (max-width:780px){
-      .nav{flex-direction:column;align-items:flex-start;gap:8px;padding:6px 0}
-      /* mobile: make logo half the screen width */
-      .logo{width:var(--logo-mobile-w);height:auto;margin-top:-4px;margin-bottom:-4px}
+      .nav{flex-direction:column;align-items:center;gap:6px;padding:2px 0}
+      .logo-wrap{width:100%;justify-content:center}
+      .logo{width:var(--logo-mobile-w);height:auto;margin-block:-10px}
       .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
-      .hero{padding-top:14px}
+      .hero{padding-top:12px}
     }
   </style>
 </head>
@@ -112,8 +111,8 @@
   <header>
     <div class="container nav">
       <div class="logo-wrap">
-        <img id="logo" class="logo" src="/uploads/logo.png" alt="Company logo">
-        <strong id="business_name">Western Holiday Lighting</strong>
+        <!-- Only the logo; name text removed -->
+        <img id="logo" class="logo" src="/uploads/logo.png" alt="Western Holiday Lighting logo">
       </div>
       <div class="cta">
         <a id="header_cta_label" class="btn outline" href="#quote">Get an Instant Estimate</a>
@@ -199,7 +198,7 @@
     const gal  = await j('/content/gallery.json');
 
     if(site){
-      text($('business_name'), site.business_name);
+      // name in header removed on purpose; footer still uses it:
       text($('business_name_footer'), site.business_name);
       attr($('logo'), 'src', site.logo || '/uploads/logo.png');
       text($('hero_headline'), site.hero_headline);
@@ -211,9 +210,9 @@
       text($('header_cta_label'), site.header_cta_label);
       const phoneHref = site.phone_href ? 'tel:'+site.phone_href : '';
       const smsHref   = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
-      if(phoneHref){ attr($('header_cta_secondary'), 'href', phoneHref); }
-      if(smsHref){   attr($('sms_link'), 'href', smsHref); }
-      text($('header_cta_secondary'), site.header_cta_secondary);
+      if(phoneHref){ $('header_cta_secondary') && $('header_cta_secondary').setAttribute('href', phoneHref); }
+      if(smsHref){   $('sms_link') && $('sms_link').setAttribute('href', smsHref); }
+      $('header_cta_secondary') && ( $('header_cta_secondary').textContent = site.header_cta_secondary || $('header_cta_secondary').textContent );
     }
 
     if(pkgs && Array.isArray(pkgs.packages)){
