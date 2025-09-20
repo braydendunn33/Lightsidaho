@@ -1,0 +1,31 @@
+{
+  "business_name": "Gem State Holiday Lights",
+  "logo": "/uploads/logo.png",
+  "phone": "(208) 409-3106",
+  "phone_href": "+12084093106",
+  "email": "info@lightsidaho.com",
+  "address_line": "1047 S Wells St Suite 120",
+  "city_region_zip": "Meridian, ID 83642",
+  "areas": [
+    "Boise",
+    "Meridian",
+    "Nampa",
+    "Kuna",
+    "Eagle",
+    "Caldwell"
+  ],
+  "header_cta_label": "Get an Instant Estimate",
+  "header_cta_secondary": "Call/Text (208) 409\u20113106",
+  "hero_headline": "Pro Christmas Light Installation across Boise\u2013Meridian\u2013Nampa",
+  "hero_subheadline": "Lease premium C9 LEDs on custom-cut lines for a perfect fit. Our full\u2011service packages include design, installation, in\u2011season maintenance, takedown, and optional storage.",
+  "hero_offer": "Book by Oct 15 & save $100",
+  "badges": [
+    "Licensed & Insured \u2022 1047 S Wells St Suite 120, Meridian, ID 83642",
+    "Same/Next\u2011Day Quotes",
+    "Warm White or Color",
+    "Two\u2011Story Ready"
+  ],
+  "service_summary": "Transparent, competitive pricing for seasonal (temporary) installs. Lease includes lights, clips, cords, timer, and maintenance. Purchase option available.",
+  "service_area_line": "Boise \u2022 Meridian \u2022 Nampa \u2022 Kuna \u2022 Eagle \u2022 Caldwell",
+  "footer_line": "Licensed & Insured \u2022 (208) 409\u20113106 \u2022 info@lightsidaho.com"
+}

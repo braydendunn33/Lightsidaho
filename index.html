@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gem State Holiday Lights | Boise–Nampa Christmas Light Installation</title>
+  <meta name="description" content="Professional, insured Christmas light installation across Treasure Valley." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0b1220;--bg2:#0f1a33;--brand:#0ea5e9;--accent:#22d3ee;--text:#e5f0ff;--muted:#98a6bd;--card:#0e162b;--xmasRed:#ef4444;--xmasGreen:#22c55e;--gold:#facc15}
+    *{box-sizing:border-box}html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:var(--accent);text-decoration:none}
+    header{position:sticky;top:0;z-index:50;background:rgba(10,15,28,.7);backdrop-filter:saturate(130%) blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .logo-wrap{display:flex;align-items:center;gap:12px}
+    .logo{height:52px;width:auto;display:block}
+    .btn{display:inline-block;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen));color:#052030;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 18px rgba(239,68,68,.15),0 2px 8px rgba(34,197,94,.15)}
+    .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:56px 0}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    .hero h1{font-size:clamp(28px,4vw,48px);line-height:1.1;margin:12px 0 10px}
+    .hero p{color:var(--muted);font-size:1.05rem}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:900px){.grid.cols-3{grid-template-columns:1fr}}
+    h2{font-size:clamp(22px,3vw,34px);margin:8px 0 6px}
+    .muted{color:var(--muted)}
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .badge{font-size:.85rem;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08)}
+    .section{padding:44px 0}
+    .price{font-size:28px;font-weight:800}
+    .from{color:var(--muted);font-size:.9rem}
+    .list{margin:10px 0 0;padding:0 0 0 18px;color:var(--text)}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .bar{margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
+    .gallery{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+    @media (max-width:900px){.gallery{grid-template-columns:repeat(3,1fr)}}
+    .gallery figure{aspect-ratio:1;border-radius:12px;background:#0d1b2a;border:1px dashed rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#99a;margin:0;overflow:hidden}
+    .gallery img{max-width:100%;max-height:100%;display:block}
+    form{display:grid;gap:12px}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1426;color:var(--text)}
+    .disclaimer{font-size:.85rem;color:#a7b5cc}
+    footer{padding:40px 0;color:#9db4d6}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo-wrap">
+        <img id="logo" class="logo" src="/uploads/logo.png" alt="Company logo">
+        <strong id="business_name">Gem State Holiday Lights</strong>
+      </div>
+      <div class="cta">
+        <a id="header_cta_label" class="btn outline" href="#quote">Get an Instant Estimate</a>
+        <a id="header_cta_secondary" class="btn" href="tel:+12084093106">Call/Text (208) 409‑3106</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <span class="badge" id="areas">Boise • Meridian • Nampa • Kuna • Eagle • Caldwell</span>
+        <h1 id="hero_headline">Pro Christmas Light Installation across Boise–Meridian–Nampa</h1>
+        <p id="hero_subheadline" class="muted">Lease premium C9 LEDs on custom-cut lines for a perfect fit...</p>
+        <p><strong id="hero_offer">Book by Oct 15 & save $100</strong></p>
+        <div class="badges" id="badges"></div>
+      </div>
+      <div class="card">
+        <h2 id="quote">Instant Estimate</h2>
+        <p class="muted">Text us your address and a photo of the front of your home for a fast quote, or use this form.</p>
+        <form name="quote" method="POST" data-netlify="true" action="/success/">
+          <input type="hidden" name="form-name" value="quote" />
+          <label>Full Name<input name="name" required></label>
+          <label>Mobile Number<input name="phone" required></label>
+          <label>Address<input name="address" required placeholder="Street, City"></label>
+          <label>Home Type<select name="stories"><option>Single‑story</option><option>Two‑story</option><option>Split level</option></select></label>
+          <label>Extras<select name="extras"><option>None</option><option>Wreath</option><option>Tree wraps</option><option>Walkway stakes</option></select></label>
+          <label>Notes<textarea name="notes" rows="3" placeholder="Anything we should know? Gate code, steep roof, etc."></textarea></label>
+          <div class="cta">
+            <button class="btn" type="submit">Get My Estimate</button>
+            <a class="btn outline" id="sms_link" href="sms:+12084093106?&body=Hi%20—%20my%20address%20is%20">Text Us Instead</a>
+          </div>
+          <p class="disclaimer">We'll send a ballpark quote using satellite & street views, then confirm on‑site.</p>
+        </form>
+      </div>
+    </section>
+
+    <section id="packages" class="section">
+      <h2>Simple Packages</h2>
+      <p id="service_summary" class="muted">Transparent, competitive pricing for seasonal installs.</p>
+      <div id="packages_wrap" class="grid cols-3"></div>
+    </section>
+
+    <section class="section">
+      <h2>Recent Work</h2>
+      <div id="gallery" class="gallery"></div>
+    </section>
+
+    <section id="faq" class="section">
+      <h2>FAQ</h2>
+      <div id="faq_wrap" class="grid cols-3"></div>
+    </section>
+
+    <section class="section">
+      <h2>What Neighbors Say</h2>
+      <div id="testimonials" class="grid cols-3"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="bar"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>© <span id="y"></span> <span id="business_name_footer">Gem State Holiday Lights</span></div>
+        <div id="footer_line" class="muted">Licensed & Insured • (208) 409‑3106 • info@lightsidaho.com</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  const $ = (id) => document.getElementById(id);
+  const j = async (p) => {try{const r=await fetch(p); if(!r.ok) return null; return await r.json();}catch(e){return null;}};
+
+  function text(el,val){ if(el && val!==undefined) el.textContent = val; }
+  function attr(el,name,val){ if(el && val) el.setAttribute(name,val); }
+
+  async function init(){
+    const site = await j('/content/site.json');
+    const pkgs = await j('/content/packages.json');
+    const faq = await j('/content/faq.json');
+    const testi = await j('/content/testimonials.json');
+    const gal = await j('/content/gallery.json');
+
+    if(site){
+      text($('business_name'), site.business_name);
+      text($('business_name_footer'), site.business_name);
+      attr($('logo'), 'src', site.logo || '/uploads/logo.png');
+      text($('hero_headline'), site.hero_headline);
+      text($('hero_subheadline'), site.hero_subheadline);
+      text($('hero_offer'), site.hero_offer);
+      text($('service_summary'), site.service_summary);
+      text($('footer_line'), site.footer_line);
+      text($('areas'), (site.areas||[]).join(' • '));
+      text($('header_cta_label'), site.header_cta_label);
+      const phoneHref = site.phone_href ? 'tel:'+site.phone_href : '';
+      const smsHref = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
+      if(phoneHref){ attr($('header_cta_secondary'), 'href', phoneHref); }
+      if(smsHref){ attr($('sms_link'), 'href', smsHref); }
+      text($('header_cta_secondary'), site.header_cta_secondary);
+    }
+
+    if(pkgs && Array.isArray(pkgs.packages)){
+      const el = $('packages_wrap');
+      el.innerHTML = pkgs.packages.map(p => `
+        <div class="card">
+          <h3>${p.title||''}</h3>
+          <div class="price">From $${p.price_from||''}</div>
+          <div class="from">${p.blurb||''}</div>
+          <ul class="list">${(p.includes||[]).map(i=>`<li>${i}</li>`).join('')}</ul>
+          <div class="cta"><a class="btn" href="#quote">${p.cta||'Get Quote'}</a></div>
+        </div>`).join('');
+    }
+
+    if(gal && Array.isArray(gal.images)){
+      const g = $('gallery');
+      g.innerHTML = gal.images.map(it => `
+        <figure title="${it.label||''}">
+          ${it.image ? `<img src="${it.image}" alt="${it.label||'Gallery'}">` : it.label||'Image'}
+        </figure>`).join('');
+    }
+
+    if(faq && Array.isArray(faq.faqs)){
+      const wrap = $('faq_wrap');
+      wrap.innerHTML = faq.faqs.map(q => `<div class="card"><h3>${q.q||''}</h3><p class="muted">${q.a||''}</p></div>`).join('');
+    }
+
+    if(testi && Array.isArray(testi.testimonials)){
+      const t = $('testimonials');
+      t.innerHTML = testi.testimonials.map(x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
+    }
+
+    $('y').textContent = new Date().getFullYear();
+  }
+  init();
+  </script>
+</body>
+</html>
