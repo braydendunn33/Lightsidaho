@@ -47,22 +47,33 @@
     input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1426;color:var(--text)}
     .disclaimer{font-size:.85rem;color:#a7b5cc}
     footer{padding:40px 0;color:#9db4d6}
-    
-/* === Tighten header + top-of-page spacing (stronger) === */
-.nav { padding: 2px 0; }          /* was 6px */
-.hero { padding: 6px 0 32px; }    /* was 24px 0 44px */
-.hero h1 { margin-top: 2px; }     /* was 6px */
 
+    /* ===== Header logo & spacing (compact) ===== */
+    .nav { padding: 2px 0; }                /* almost no header cushion */
 
-
-    /* ===== Bigger header logo & responsive tweaks ===== */
-    .logo { height: 280px; width: auto; }
-    header .cta { gap: 10px; flex-wrap: wrap; }
-    @media (max-width: 1100px) { .logo { height: 96px; } }
-    @media (max-width: 780px) {
-      .nav { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .logo { height: 72px; }
+    .logo {
+      height: 120px;                        /* adjust this for desktop */
+      width: auto;
+      display: block;
+      margin-top: -8px;                     /* trims transparent pixels in PNG */
+      margin-bottom: -8px;
     }
+
+    header .cta { gap: 8px; flex-wrap: wrap; }
+
+    /* Tablet */
+    @media (max-width: 1100px) {
+      .logo { height: 90px; margin-top: -6px; margin-bottom: -6px; }
+    }
+    /* Phone */
+    @media (max-width: 780px) {
+      .nav { padding: 4px 0; flex-direction: column; align-items: flex-start; gap: 8px; }
+      .logo { height: 68px; margin-top: -4px; margin-bottom: -4px; }
+    }
+
+    /* Tighten space under the header */
+    .hero { padding: 10px 0 28px; }
+    .hero h1 { margin-top: 0; }
   </style>
 </head>
 <body>
@@ -157,7 +168,7 @@
     if(site){
       text($('business_name'), site.business_name);
       text($('business_name_footer'), site.business_name);
-      attr($('logo'), 'src', site.logo || '/uploads/logo.png');  // fallback path
+      attr($('logo'), 'src', site.logo || '/uploads/logo.png');  // fallback; works with Netlify rewrite
       text($('hero_headline'), site.hero_headline);
       text($('hero_subheadline'), site.hero_subheadline);
       text($('hero_offer'), site.hero_offer);
