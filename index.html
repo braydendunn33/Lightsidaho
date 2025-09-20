@@ -16,18 +16,21 @@
       --bg:#0b1220; --bg2:#0f1a33; --brand:#0ea5e9; --accent:#22d3ee; --text:#e5f0ff; --muted:#98a6bd; --card:#0e162b;
       --xmasRed:#ef4444; --xmasGreen:#22c55e; --gold:#facc15;
 
-      /* easy knobs */
-      --logo-desktop: 384px;   /* desktop logo height */
-      --logo-trim-d: -56px;    /* desktop top/bottom trim (more negative = tighter) */
-
-      --logo-mobile-w: 70vw;   /* mobile logo width (centered) */
-      --logo-top-m: 18px;      /* push logo DOWN on mobile */
-      --logo-bottom-m: -84px;  /* tighten space under logo on mobile */
-
-      --h1-max: 42px;          /* max H1 size */
+      /* layout + easy knobs */
+      --content-max: 1100px;     /* matches .container max-width */
+      --logo-desktop: 384px;     /* desktop logo height */
+      --logo-trim-d: -56px;      /* desktop trim (more negative = tighter) */
+      --logo-mobile-w: 70vw;     /* mobile logo width (centered) */
+      --logo-top-m: 18px;        /* push logo DOWN on mobile */
+      --logo-bottom-m: -84px;    /* tighten space under logo on mobile */
+      --h1-max: 42px;            /* max H1 size */
       --badge-font: 0.95rem;
       --badge-pad-y: 6px;
       --badge-pad-x: 12px;
+
+      /* dynamic (set by JS) */
+      --header-h: 260px;         /* actual header height gets measured */
+      --side-gutter: max(0px, calc((100vw - var(--content-max)) / 2));
     }
 
     *{box-sizing:border-box}
@@ -42,7 +45,7 @@
       backdrop-filter:saturate(130%) blur(8px);
       background-image: var(--header-bg, none); /* set by JS from CMS */
       background-size: cover; background-position: center; background-repeat: no-repeat;
-      z-index: 10; /* below snow (40), below cards (55) */
+      z-index: 10; /* below snow (40), below cards/CTA (55/60) */
     }
     .header-overlay{
       position: absolute; inset: 0; z-index: 1;
@@ -50,7 +53,7 @@
       pointer-events: none;
     }
 
-    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    .container{max-width:var(--content-max);margin:0 auto;padding:0 20px}
 
     /* compact header bar */
     .nav{position:relative; z-index:2; display:flex;align-items:center;justify-content:space-between;padding:0}
@@ -96,7 +99,7 @@
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
       border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;
-      position: relative; z-index:55; /* ABOVE snowflakes (z:40) */
+      position: relative; z-index:55; /* ABOVE snow (z:40) */
     }
     /* Utility: add class="shield" on any block you want above the snow */
     .shield{ position: relative; z-index:55; }
@@ -120,7 +123,7 @@
     form{display:grid;gap:12px}
     input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1426;color:var(--text)}
     .disclaimer{font-size:.85rem;color:#a7b5cc}
-    footer{padding:40px 0;color:#9db4d6}
+    footer{padding:40px 0;color:#9db4d6; position:relative; z-index:55;}
 
     /* Floating CTA (desktop right; mobile centered) */
     .floating-cta{
@@ -134,38 +137,37 @@
     }
     .floating-cta.hidden{ opacity:0; transform:translateY(16px); pointer-events:none; }
 
-    /* ===== Snowflakes (fixed overlay UNDER cards) ===== */
-    .snowflakes{
-      pointer-events:none; position:fixed; inset:0; z-index:40; /* ABOVE header (10), BELOW cards/CTA (55/60) */
-      overflow:hidden;
+    /* ===== Snow system: TOP (header only) + SIDES (outside container) ===== */
+    /* These layers sit UNDER the content (z:40 vs cards/shields z:55) */
+    .snow-top, .snow-left, .snow-right{
+      position: fixed; pointer-events:none; z-index:40; overflow:hidden;
     }
-    .snowflake{
-      position:absolute;
-      top:-2rem;             /* start just above the viewport */
-      font-size:1.1rem;
-      color:#fff;
-      opacity:.85;
+    /* top snow covers just the header height (measured by JS) */
+    .snow-top{ top:0; left:0; width:100vw; height:var(--header-h); }
+    /* side snows fill left/right gutters outside the container */
+    .snow-left{ top:0; left:0; width:var(--side-gutter); height:100vh; }
+    .snow-right{ top:0; right:0; width:var(--side-gutter); height:100vh; }
+
+    /* individual flakes */
+    .flake{
+      position:absolute; top:-2rem; font-size:1.1rem; color:#fff; opacity:.85;
       will-change: top, transform;
       animation: snow-fall linear infinite, snow-drift ease-in-out infinite;
     }
     @keyframes snow-fall{ from{ top:-2rem; } to{ top:110vh; } }
     @keyframes snow-drift{ 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(18px); } }
 
-    /* sprinkle positions/delays for ~14 flakes */
-    .snowflake:nth-child(1){ left: 5%;  animation-duration: 11s, 5s;   animation-delay: 0s, .5s;}
-    .snowflake:nth-child(2){ left: 15%; animation-duration: 13s, 6s;   animation-delay: 2s, 0s;}
-    .snowflake:nth-child(3){ left: 25%; animation-duration: 12s, 4.5s; animation-delay: 1s, .2s;}
-    .snowflake:nth-child(4){ left: 35%; animation-duration: 10s, 5.2s; animation-delay: 3s, .3s;}
-    .snowflake:nth-child(5){ left: 45%; animation-duration: 14s, 6.5s; animation-delay: .5s, .4s;}
-    .snowflake:nth-child(6){ left: 55%; animation-duration: 12.5s, 6s; animation-delay: 1.5s, .7s;}
-    .snowflake:nth-child(7){ left: 65%; animation-duration: 11.5s, 5.5s; animation-delay: 2.5s, .1s;}
-    .snowflake:nth-child(8){ left: 75%; animation-duration: 13.5s, 6.2s; animation-delay: .8s, .6s;}
-    .snowflake:nth-child(9){ left: 85%; animation-duration: 12s, 5.8s;  animation-delay: 1.2s, .4s;}
-    .snowflake:nth-child(10){left: 50%; animation-duration: 15s, 7s;   animation-delay: .3s, .9s;}
-    .snowflake:nth-child(11){left: 30%; animation-duration: 16s, 7.2s; animation-delay: 1.8s, .5s;}
-    .snowflake:nth-child(12){left: 10%; animation-duration: 14.5s,6.8s; animation-delay: .6s, .8s;}
-    .snowflake:nth-child(13){left: 90%; animation-duration: 13.2s,6.1s; animation-delay: 2.2s, .6s;}
-    .snowflake:nth-child(14){left: 70%; animation-duration: 12.8s,5.9s; animation-delay: .9s, .2s;}
+    /* sprinkle positions/delays (10 per layer) */
+    .flake:nth-child(1){ left:5%;  animation-duration:11s,5s;  animation-delay:0s,.5s;}
+    .flake:nth-child(2){ left:15%; animation-duration:13s,6s;  animation-delay:2s,0s;}
+    .flake:nth-child(3){ left:25%; animation-duration:12s,4.5s;animation-delay:1s,.2s;}
+    .flake:nth-child(4){ left:35%; animation-duration:10s,5.2s;animation-delay:3s,.3s;}
+    .flake:nth-child(5){ left:45%; animation-duration:14s,6.5s;animation-delay:.5s,.4s;}
+    .flake:nth-child(6){ left:55%; animation-duration:12.5s,6s;animation-delay:1.5s,.7s;}
+    .flake:nth-child(7){ left:65%; animation-duration:11.5s,5.5s;animation-delay:2.5s,.1s;}
+    .flake:nth-child(8){ left:75%; animation-duration:13.5s,6.2s;animation-delay:.8s,.6s;}
+    .flake:nth-child(9){ left:85%; animation-duration:12s,5.8s; animation-delay:1.2s,.4s;}
+    .flake:nth-child(10){left:50%; animation-duration:15s,7s;  animation-delay:.3s,.9s;}
 
     /* responsive tweaks */
     @media (max-width:1100px){
@@ -190,7 +192,7 @@
 
     /* Respect users who prefer less motion */
     @media (prefers-reduced-motion: reduce){
-      .snowflake{ animation: none; }
+      .flake{ animation: none; }
     }
   </style>
 </head>
@@ -208,12 +210,18 @@
     </div>
   </header>
 
-  <!-- Snow overlay (falls over header & edges, but UNDER cards/shields) -->
-  <div class="snowflakes" aria-hidden="true">
-    <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
-    <div class="snowflake">❅</div><div class="snowflake">❆</div>
+  <!-- Snow layers: header-only + left/right gutters (no snow over content) -->
+  <div class="snow-top" aria-hidden="true">
+    <div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div>
+    <div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div>
+  </div>
+  <div class="snow-left" aria-hidden="true">
+    <div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div>
+    <div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div>
+  </div>
+  <div class="snow-right" aria-hidden="true">
+    <div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div>
+    <div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div><div class="flake">❅</div><div class="flake">❆</div>
   </div>
 
   <!-- Floating CTA -->
@@ -289,6 +297,14 @@
   function text(el,val){ if(el && val!==undefined) el.textContent = val; }
   function attr(el,name,val){ if(el && val) el.setAttribute(name,val); }
 
+  // Measure header height for snow-top and update CSS var
+  function setHeaderHeightVar(){
+    const header = document.querySelector('.header-hero');
+    if (!header) return;
+    const h = header.offsetHeight || 260;
+    document.documentElement.style.setProperty('--header-h', h + 'px');
+  }
+
   async function init(){
     const site  = await j('/content/site.json');
     const pkgs  = await j('/content/packages.json');
@@ -359,6 +375,12 @@
       }, {rootMargin: '0px 0px -30% 0px', threshold: 0});
       io.observe(quoteEl);
     }
+
+    // Set header height var for top-snow; update on logo load & window resize
+    setHeaderHeightVar();
+    const logo = document.getElementById('logo');
+    if (logo && !logo.complete) { logo.addEventListener('load', setHeaderHeightVar, { once:true }); }
+    window.addEventListener('resize', setHeaderHeightVar);
   }
   init();
 
