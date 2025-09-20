@@ -18,7 +18,7 @@
 
       /* easy knobs */
       --logo-desktop: 384px;   /* desktop logo height */
-      --logo-trim-d: -56px;    /* top/bottom trim (desktop); more negative = tighter */
+      --logo-trim-d: -56px;    /* desktop top/bottom trim (more negative = tighter) */
 
       --logo-mobile-w: 70vw;   /* mobile logo width (centered) */
       --logo-top-m: 18px;      /* push logo DOWN on mobile */
@@ -42,6 +42,7 @@
       backdrop-filter:saturate(130%) blur(8px);
       background-image: var(--header-bg, none); /* set by JS from CMS */
       background-size: cover; background-position: center; background-repeat: no-repeat;
+      z-index: 10; /* below snow (40), below cards (55) */
     }
     .header-overlay{
       position: absolute; inset: 0; z-index: 1;
@@ -91,10 +92,15 @@
     .hero h1{font-size:clamp(26px,3.3vw,var(--h1-max));line-height:1.08;margin:6px 0 10px}
     .hero p{color:var(--muted);font-size:1.02rem;margin-top:4px}
 
+    /* Cards (shielded from snow via z-index) */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px
+      border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;
+      position: relative; z-index:55; /* ABOVE snowflakes (z:40) */
     }
+    /* Utility: add class="shield" on any block you want above the snow */
+    .shield{ position: relative; z-index:55; }
+
     .grid{display:grid;gap:16px}
     .grid.cols-3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:900px){.grid.cols-3{grid-template-columns:1fr}}
@@ -116,7 +122,7 @@
     .disclaimer{font-size:.85rem;color:#a7b5cc}
     footer{padding:40px 0;color:#9db4d6}
 
-    /* Floating CTA button (desktop right; mobile centered) */
+    /* Floating CTA (desktop right; mobile centered) */
     .floating-cta{
       position:fixed; right:16px; bottom:16px; z-index:60;
       display:inline-flex; align-items:center; gap:10px;
@@ -128,9 +134,9 @@
     }
     .floating-cta.hidden{ opacity:0; transform:translateY(16px); pointer-events:none; }
 
-    /* ===== Snowflakes (fixed overlay) ===== */
+    /* ===== Snowflakes (fixed overlay UNDER cards) ===== */
     .snowflakes{
-      pointer-events:none; position:fixed; inset:0; z-index:40; /* above content, below CTA */
+      pointer-events:none; position:fixed; inset:0; z-index:40; /* ABOVE header (10), BELOW cards/CTA (55/60) */
       overflow:hidden;
     }
     .snowflake{
@@ -180,11 +186,6 @@
       /* center the floating CTA on phones */
       .floating-cta{ left:50%; right:auto; bottom:14px; transform:translateX(-50%); }
       .floating-cta.hidden{ transform: translate(-50%, 16px); }
-
-      /* (optional) lighten snow on tiny phones */
-      @media (max-width:420px){
-        .snowflake{ opacity:.75; font-size:1rem; }
-      }
     }
 
     /* Respect users who prefer less motion */
@@ -207,7 +208,7 @@
     </div>
   </header>
 
-  <!-- Snow overlay -->
+  <!-- Snow overlay (falls over header & edges, but UNDER cards/shields) -->
   <div class="snowflakes" aria-hidden="true">
     <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
     <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
@@ -220,7 +221,8 @@
 
   <main class="container">
     <section class="hero">
-      <div>
+      <!-- Shield hero copy so flakes don't pass through the left text column -->
+      <div class="shield">
         <span class="badge" id="areas">Boise • Meridian • Nampa • Kuna • Eagle • Caldwell</span>
         <h1 id="hero_headline">Pro Christmas Light Installation across Boise–Meridian–Nampa</h1>
         <p id="hero_subheadline" class="muted">Lease premium C9 LEDs on custom-cut lines for a perfect fit. Our full-service packages include design, installation, in-season maintenance, takedown, and optional storage.</p>
@@ -248,29 +250,29 @@
       </div>
     </section>
 
-    <section id="packages" class="section">
+    <section id="packages" class="section shield">
       <h2>Simple Packages</h2>
       <p id="service_summary" class="muted">Transparent, competitive pricing for seasonal installs.</p>
       <div id="packages_wrap" class="grid cols-3"></div>
     </section>
 
-    <section class="section">
+    <section class="section shield">
       <h2>Recent Work</h2>
       <div id="gallery" class="gallery"></div>
     </section>
 
-    <section id="faq" class="section">
+    <section id="faq" class="section shield">
       <h2>FAQ</h2>
       <div id="faq_wrap" class="grid cols-3"></div>
     </section>
 
-    <section class="section">
+    <section class="section shield">
       <h2>What Neighbors Say</h2>
       <div id="testimonials" class="grid cols-3"></div>
     </section>
   </main>
 
-  <footer>
+  <footer class="shield">
     <div class="container">
       <div class="bar"></div>
       <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
