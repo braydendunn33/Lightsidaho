@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Netlify Identity widget so invite links & login work anywhere -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     :root{--bg:#0b1220;--bg2:#0f1a33;--brand:#0ea5e9;--accent:#22d3ee;--text:#e5f0ff;--muted:#98a6bd;--card:#0e162b;--xmasRed:#ef4444;--xmasGreen:#22c55e;--gold:#facc15}
     *{box-sizing:border-box}html,body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -181,12 +183,28 @@
 
     if(testi && Array.isArray(testi.testimonials)){
       const t = $('testimonials');
-      t.innerHTML = testi.testimonials.map(x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
+      t.innerHTML = testi.testimonials.map x => `<div class="card"><p>"${x.quote||''}"</p><p class="muted">— ${x.name||''}</p></div>`).join('');
     }
 
     $('y').textContent = new Date().getFullYear();
   }
   init();
+
+  // If an invite link lands on the homepage (/#/invite/...), forward it to /admin/ so the CMS completes signup
+  if (location.hash && location.hash.startsWith('#/invite')) {
+    location.href = '/admin/' + location.hash;
+  }
+
+  // After login, send user to /admin/
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', (user) => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
   </script>
 </body>
 </html>
