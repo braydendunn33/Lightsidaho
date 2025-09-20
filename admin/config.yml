@@ -18,6 +18,7 @@ collections:
         fields:
           - {label: "Business Name", name: "business_name", widget: "string"}
           - {label: "Logo", name: "logo", widget: "image"}
+          - {label: "Header Background", name: "header_bg", widget: "image", required: false, choose_url: true, hint: "Optional photo behind the logo (1800×600+ works best)."}
           - {label: "Phone (display)", name: "phone", widget: "string"}
           - {label: "Phone (link, digits only)", name: "phone_href", widget: "string"}
           - {label: "Email", name: "email", widget: "string"}
