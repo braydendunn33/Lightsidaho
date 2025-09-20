@@ -17,11 +17,14 @@
 
       /* easy knobs */
       --logo-desktop: 240px;   /* desktop logo height */
-      --logo-mobile-w: 70vw;   /* mobile logo width (centered) */
-      --logo-trim-d: -46px;    /* trim top/bottom on desktop */
-      --logo-trim-m: -66px;    /* trim top/bottom on mobile */
-      --h1-max: 42px;          /* max size of H1 */
-      --badge-font: 0.95rem;   /* locations pill size */
+      --logo-trim-d: -46px;    /* desktop trim (top & bottom) */
+
+      --logo-mobile-w: 70vw;   /* mobile logo width */
+      --logo-top-m: 18px;      /* push logo DOWN on mobile */
+      --logo-bottom-m: -84px;  /* tighten space under logo on mobile */
+
+      --h1-max: 42px;
+      --badge-font: 0.95rem;
       --badge-pad-y: 6px;
       --badge-pad-x: 12px;
     }
@@ -33,15 +36,15 @@
     /* ===== Header with optional background image ===== */
     .header-hero{
       position: sticky; top: 0; z-index: 50;
-      background: rgba(10,15,28,.7); /* fallback color */
+      background: rgba(10,15,28,.7);
       border-bottom:1px solid rgba(255,255,255,.06);
       backdrop-filter:saturate(130%) blur(8px);
-      background-image: var(--header-bg, none); /* set by JS from CMS */
+      background-image: var(--header-bg, none);
       background-size: cover; background-position: center; background-repeat: no-repeat;
     }
     .header-overlay{
       position: absolute; inset: 0; z-index: 1;
-      background: rgba(0,0,0,.35); /* darken photo so logo/buttons pop */
+      background: rgba(0,0,0,.35);
       pointer-events: none;
     }
 
@@ -51,7 +54,7 @@
     .nav{position:relative; z-index:2; display:flex;align-items:center;justify-content:space-between;padding:0}
     .logo-wrap{display:flex;align-items:center;gap:0}
 
-    /* BIG logo, minimal vertical cushion */
+    /* BIG logo, minimal vertical cushion (desktop) */
     .logo{
       height:var(--logo-desktop);
       width:auto; display:block;
@@ -112,12 +115,13 @@
       .nav{flex-direction:column;align-items:center;gap:6px;padding:2px 0}
       .logo-wrap{width:100%;justify-content:center}
       .logo{
-        width:var(--logo-mobile-w);
-        height:auto;
-        margin-block: var(--logo-trim-m);
+        width: var(--logo-mobile-w);
+        height: auto;
+        margin-top: var(--logo-top-m);       /* push DOWN */
+        margin-bottom: var(--logo-bottom-m); /* tighten space under */
       }
       .badge{font-size:calc(var(--badge-font) - .05rem);margin-bottom:12px}
-      .hero{padding-top:12px}
+      .hero{padding-top:16px}
     }
   </style>
 </head>
@@ -126,7 +130,6 @@
     <div class="header-overlay"></div>
     <div class="container nav">
       <div class="logo-wrap">
-        <!-- Only the logo; name text removed -->
         <img id="logo" class="logo" src="/uploads/logo.png" alt="Western Holiday Lighting logo">
       </div>
       <div class="cta">
@@ -213,17 +216,13 @@
     const gal   = await j('/content/gallery.json');
 
     if(site){
-      // footer name & header assets
       text($('business_name_footer'), site.business_name);
       attr($('logo'), 'src', site.logo || '/uploads/logo.png');
 
-      // header background image from CMS (Business Settings → Header Background)
+      // header background from CMS
       const headerEl = document.querySelector('.header-hero');
-      if (headerEl && site.header_bg) {
-        headerEl.style.setProperty('--header-bg', `url(${site.header_bg})`);
-      }
+      if (headerEl && site.header_bg) headerEl.style.setProperty('--header-bg', `url(${site.header_bg})`);
 
-      // copy over text fields
       text($('hero_headline'), site.hero_headline);
       text($('hero_subheadline'), site.hero_subheadline);
       text($('hero_offer'), site.hero_offer);
@@ -232,7 +231,6 @@
       text($('areas'), (site.areas||[]).join(' • '));
       text($('header_cta_label'), site.header_cta_label);
 
-      // phone links
       const phoneHref = site.phone_href ? 'tel:'+site.phone_href : '';
       const smsHref   = site.phone_href ? 'sms:'+site.phone_href+'?&body=Hi%20—%20my%20address%20is%20' : '';
       if(phoneHref){ $('header_cta_secondary')?.setAttribute('href', phoneHref); }
@@ -270,12 +268,10 @@
   }
   init();
 
-  // Identity invite redirect
   if (location.hash && location.hash.startsWith('#/invite')) {
     location.href = '/admin/' + location.hash;
   }
 
-  // After login, send user to /admin/
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', (user) => {
       if (!user) {
