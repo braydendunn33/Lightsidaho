@@ -1,39 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Thanks — Message Received | lightsidaho.com</title>
-  <meta name="description" content="Thanks! Your message was sent successfully. We'll get back to you shortly." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <meta http-equiv="refresh" content="8; url=/" />
+  <title>Thanks! We got your message</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --brand:#22d3ee; --brand2:#60a5fa }
-    *{box-sizing:border-box} html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,rgba(34,211,238,.15),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(96,165,250,.12),transparent 60%),var(--bg);color:var(--text);display:grid;place-items:center;padding:24px}
-    .card{width:100%;max-width:620px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(148,163,184,.22);border-radius:20px;padding:32px 28px;box-shadow:0 10px 30px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(6px)}
-    h1{margin:14px 0 10px;font-size:clamp(28px,4.5vw,40px);line-height:1.1}
-    p{margin:10px 0;color:var(--muted);font-size:16px}
-    .actions{margin-top:20px;display:flex;flex-wrap:wrap;gap:12px}
-    .btn{appearance:none;border:none;cursor:pointer;padding:12px 16px;border-radius:12px;font-weight:600;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#0b1220;box-shadow:0 6px 16px rgba(34,211,238,.25)}
-    .btn.secondary{background:transparent;color:var(--text);border:1px solid rgba(148,163,184,.28);box-shadow:none}
-    footer{margin-top:18px;text-align:center;font-size:12px;color:var(--muted)}
-    a.link{color:#93c5fd;text-decoration:underline}
+    :root{--bg:#0b1220; --text:#e5f0ff; --muted:#a8b0c2; --xmasRed:#ef4444; --xmasGreen:#22c55e}
+    *{box-sizing:border-box} html,body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text)}
+    .wrap{min-height:100svh; display:grid; place-items:center; padding:32px}
+    .card{max-width:760px; width:100%; padding:26px 28px; border-radius:18px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08); box-shadow:0 18px 48px rgba(0,0,0,.25)}
+    h1{margin:0 0 6px; font-size:clamp(26px,4vw,38px); line-height:1.15}
+    p{color:var(--muted)}
+    .cta{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0}
+    .btn{display:inline-block; padding:11px 16px; border-radius:12px; font-weight:700; color:#052030;
+      background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen))}
+    .btn.ghost{background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.18)}
+    footer{margin-top:18px; text-align:center; color:#9db4d6; font-size:.92rem}
   </style>
 </head>
 <body>
-  <main class="card" role="main" aria-labelledby="title">
-    <h1 id="title">Thanks! We got your message.</h1>
-    <p>Your submission was received and our team will reach out soon (usually within <strong>1 business day</strong>).</p>
-    <div class="actions">
-      <a class="btn" href="/">Back to Home</a>
-      <a class="btn secondary" href="mailto:info@lightsidaho.com">Email Support</a>
+  <div class="wrap">
+    <div class="card">
+      <h1>Thanks! We got your message.</h1>
+      <p>Your submission was received and our team will reach out soon (usually within <strong>1 business day</strong>).</p>
+      <div class="cta">
+        <a class="btn ghost" href="/">Back to Home</a>
+        <a class="btn" href="mailto:info@lightsidaho.com">Email Support</a>
+      </div>
+      <p class="muted">You’ll be redirected to the homepage automatically in a few seconds.</p>
+      <footer>© <span id="y"></span> lightsidaho.com · <a href="/" style="color:#9db4d6">Home</a></footer>
     </div>
-    <p>You’ll be redirected to the homepage automatically in a few seconds.</p>
-  </main>
-  <footer>© <span id="y"></span> lightsidaho.com · <a class="link" href="/">Home</a></footer>
-  <script>document.getElementById('y').textContent = new Date().getFullYear()</script>
+  </div>
+  <script>document.getElementById('y').textContent = new Date().getFullYear(); setTimeout(()=>location.href='/', 4000);</script>
 </body>
 </html>
