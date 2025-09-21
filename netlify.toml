@@ -1,7 +1,7 @@
 [build]
   publish = "."
 
-# --- Force HTTPS on both apex and www ---
+# Force http → https on both apex and www
 [[redirects]]
   from = "http://lightsidaho.com/*"
   to   = "https://lightsidaho.com/:splat"
@@ -13,12 +13,3 @@
   to   = "https://lightsidaho.com/:splat"
   status = 301
   force = true
-
-# --- Security headers (nice to have) ---
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    Content-Security-Policy   = "upgrade-insecure-requests"
-    X-Content-Type-Options    = "nosniff"
-    Referrer-Policy           = "strict-origin-when-cross-origin"
