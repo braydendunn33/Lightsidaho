@@ -41,19 +41,21 @@
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     a{color:var(--accent);text-decoration:none}
 
-    /* ===== Snow layer (full page, behind content) ===== */
-    .snow-global{position:fixed; inset:0; z-index:1; pointer-events:none}
-    /* everything else sits above snow */
-    header, main, footer{position:relative; z-index:2}
+    /* ===== Snow layers ===== */
+    /* global background snow (behind everything) */
+    .snow-bg{position:fixed; inset:0; z-index:0; pointer-events:none}
+    /* header snow (over banner, under nav/logo/buttons) */
+    .snow-top{position:absolute; inset:0; z-index:2; pointer-events:none}
 
     /* ===== Header (not sticky) ===== */
     .header{
       position:relative;
-      background: #0a0f1c var(--header-bg, url('/uploads/banner.jpg')) center/cover no-repeat;
+      background:#0a0f1c var(--header-bg, url('/uploads/banner.jpg')) center/cover no-repeat;
       border-bottom:1px solid rgba(255,255,255,.06);
+      z-index:1; /* sits above global snow */
     }
     .header::after{
-      content:""; position:absolute; inset:0;
+      content:""; position:absolute; inset:0; z-index:1;
       background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18) 45%, rgba(0,0,0,0) 100%);
       pointer-events:none;
     }
@@ -65,7 +67,7 @@
     .logo-wrap{display:flex;align-items:center}
     .logo{height:var(--logo-desktop); width:auto; display:block; margin:-38px 0} /* trims PNG transparent space */
 
-    /* center menu + right CTAs (like the original) */
+    /* center menu + right CTAs */
     .menu{display:flex; gap:16px; align-items:center; justify-content:center; margin:0 14px; flex:1}
     .menu a{color:#cfe0ff; opacity:.9; font-weight:600; font-size:.95rem}
     .menu a:hover{opacity:1; text-decoration:underline}
@@ -75,13 +77,20 @@
     .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
 
     /* ===== Main hero ===== */
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:22px 0 36px}
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:22px 0 36px;position:relative;z-index:1}
     @media (max-width:900px){.hero{grid-template-columns:1fr}}
     .badge{display:inline-block;font-size:.92rem;padding:6px 12px;margin:6px 0 14px 0;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--text)}
     .hero h1{font-size:clamp(26px,3.2vw,var(--h1-max));line-height:1.08;margin:6px 0 10px}
     .hero p{color:var(--muted);font-size:1.02rem;margin-top:4px}
 
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;position:relative;z-index:3}
+    /* OPAQUE card so snow behind is fully hidden */
+    .card{
+      background:#0f162b; /* solid; no alpha */
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px; padding:18px;
+      position:relative; z-index:3;
+      box-shadow:0 10px 28px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+    }
     form{display:grid;gap:12px}
     input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1426;color:var(--text)}
 
@@ -95,13 +104,10 @@
     .gallery figure{aspect-ratio:1;border-radius:12px;background:#0d1b2a;border:1px dashed rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#99a;margin:0;overflow:hidden}
     .gallery img{max-width:100%;max-height:100%;display:block}
     .bar{margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
-    footer{padding:40px 0;color:#9db4d6}
+    footer{padding:40px 0;color:#9db4d6;position:relative;z-index:1}
 
     /* ===== Responsive header ===== */
-    @media (max-width:980px){
-      .menu{gap:12px}
-      .menu a{font-size:.9rem}
-    }
+    @media (max-width:980px){ .menu{gap:12px} .menu a{font-size:.9rem} }
     @media (max-width:780px){
       .logo{width:var(--logo-mobile-w);height:auto;margin:-62px 0}
       .nav{flex-direction:column;align-items:center;gap:8px;padding:6px 0}
@@ -112,13 +118,14 @@
   </style>
 </head>
 <body>
-  <!-- Snow (full-page, behind everything) -->
-  <div class="snow-global" aria-hidden="true">
-    <canvas id="sn" width="1" height="1"></canvas>
-  </div>
+  <!-- Global background snow (behind everything) -->
+  <div class="snow-bg" aria-hidden="true"><canvas id="snowBg" width="1" height="1"></canvas></div>
 
   <!-- Header/Banner -->
   <header class="header">
+    <!-- Snow over the banner only -->
+    <div class="snow-top" aria-hidden="true"><canvas id="snowTop" width="1" height="1"></canvas></div>
+
     <div class="container nav">
       <div class="logo-wrap">
         <img id="logo" class="logo" src="/uploads/logo.png" alt="Western Holiday Lighting logo">
@@ -132,7 +139,7 @@
         <a href="#reviews">Reviews</a>
       </nav>
 
-      <!-- Right side CTAs (original placement) -->
+      <!-- Right side CTAs -->
       <div class="cta-row">
         <a id="header_cta_label" class="btn outline" href="#quote">Get an Instant Estimate</a>
         <a id="header_cta_secondary" class="btn" href="tel:+12084093106">Call/Text (208) 409-3106</a>
@@ -259,46 +266,62 @@
     }
     init();
 
-    /* Snow across whole page, slower + fades out ~10s.
-       Sits behind content because canvas is z-index:1 and cards/sections are above. */
-    (function snow(){
-      const c = document.getElementById('sn');
-      const ctx = c.getContext('2d');
-      function size(){ c.width = innerWidth; c.height = innerHeight; }
-      size(); addEventListener('resize', size);
+    /* ========= Snow: header (over banner) & background (behind content) ========= */
+    function startSnow(canvas, opts){
+      const ctx = canvas.getContext('2d');
+      function size(){ canvas.width = innerWidth; canvas.height = opts.height || innerHeight; }
+      size(); addEventListener('resize', size, {passive:true});
 
       let flakes = [];
-      function make(n){
+      function add(n){
         for(let i=0;i<n;i++){
           flakes.push({
-            x: Math.random()*c.width,
-            y: Math.random()*-c.height*0.2 - 10,
-            r: 1 + Math.random()*2.6,
-            s: 0.25 + Math.random()*0.75,            // slower fall speed
+            x: Math.random()*canvas.width,
+            y: -Math.random()* (opts.spawnBand || canvas.height*0.25) - 8,
+            r: opts.rMin + Math.random()*(opts.rMax-opts.rMin),
+            s: opts.speedMin + Math.random()*(opts.speedMax-opts.speedMin),
             drift: (Math.random()*0.6-0.3)
           });
         }
       }
-      make(120);
-      const adder = setInterval(()=>make(36), 1100); // gentle waves
+
+      // feed for ~3.5s, fade by ~5s
+      add(opts.initial || 120);
+      const feeder = setInterval(()=>add(opts.trickle || 30), 800);
+      setTimeout(()=>clearInterval(feeder), 3500);
 
       let t=0, raf;
-      (function step(){
-        ctx.clearRect(0,0,c.width,c.height);
-        ctx.fillStyle="rgba(255,255,255,.9)";
+      (function tick(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = opts.color || "rgba(255,255,255,.9)";
         for(const f of flakes){
           f.y += f.s;
           f.x += Math.sin((t+f.y)/80)*0.35 + f.drift;
-          ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,6.283); ctx.fill();
+          if (f.y < canvas.height+8){
+            ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,6.283); ctx.fill();
+          }
         }
-        flakes = flakes.filter(f=>f.y < c.height+8);
-        t++; raf=requestAnimationFrame(step);
+        flakes = flakes.filter(f=>f.y < canvas.height+8);
+        t++; raf=requestAnimationFrame(tick);
       })();
 
-      setTimeout(()=>clearInterval(adder), 9000);           // stop adding after 9s
-      setTimeout(()=>{ c.style.transition="opacity .8s"; c.style.opacity="0"; }, 10500);
-      setTimeout(()=>{ cancelAnimationFrame(raf); ctx.clearRect(0,0,c.width,c.height); }, 11500);
-    })();
+      setTimeout(()=>{ canvas.style.transition="opacity .7s"; canvas.style.opacity="0"; }, 4700);
+      setTimeout(()=>{ cancelAnimationFrame(raf); ctx.clearRect(0,0,canvas.width,canvas.height); }, 5600);
+    }
+
+    // Start both snows
+    window.addEventListener('load', () => {
+      // header snow: only as tall as header element
+      const header = document.querySelector('.header');
+      const cTop = document.getElementById('snowTop');
+      const setTopSize = () => { cTop.width = innerWidth; cTop.height = header.getBoundingClientRect().height; };
+      setTopSize(); addEventListener('resize', setTopSize, {passive:true});
+      startSnow(cTop, { height: cTop.height, rMin:1, rMax:2.6, speedMin:.35, speedMax:1.0, initial:140, trickle:36 });
+
+      // background snow: full viewport, behind content
+      const cBg = document.getElementById('snowBg');
+      startSnow(cBg, { rMin:1, rMax:2.4, speedMin:.25, speedMax:.8, initial:120, trickle:30 });
+    });
 
     // CMS invite redirect + login handoff
     if (location.hash && location.hash.startsWith('#/invite')) location.href = '/admin/' + location.hash;
