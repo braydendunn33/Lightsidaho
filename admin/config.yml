@@ -2,8 +2,8 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "static/uploads"
-public_folder: "/uploads"
+media_folder: "static/uploads"   # where files live in repo
+public_folder: "/uploads"        # how the site refers to them
 
 publish_mode: editorial_workflow
 
@@ -17,22 +17,18 @@ collections:
         format: "json"
         fields:
           - {label: "Business Name", name: "business_name", widget: "string"}
-          - {label: "Logo", name: "logo", widget: "image"}
-          - {label: "Header Background", name: "header_bg", widget: "image", required: false, choose_url: true, hint: "Optional photo behind the logo (1800×600+ works best)."}
-          - {label: "Phone (display)", name: "phone", widget: "string"}
-          - {label: "Phone (link, digits only)", name: "phone_href", widget: "string"}
-          - {label: "Email", name: "email", widget: "string"}
-          - {label: "Address Line", name: "address_line", widget: "string"}
-          - {label: "City/Region/ZIP", name: "city_region_zip", widget: "string"}
-          - {label: "Areas Served", name: "areas", widget: "list", field: {label: "Area", name: "area", widget: "string"}}
+          - {label: "Logo", name: "logo", widget: "image"}               # shows in header
+          - {label: "Header Background", name: "header_bg", widget: "image", required: false}
           - {label: "Header CTA Label", name: "header_cta_label", widget: "string"}
           - {label: "Header Secondary CTA", name: "header_cta_secondary", widget: "string"}
+          - {label: "Phone (display)", name: "phone", widget: "string"}
+          - {label: "Phone (link, digits only)", name: "phone_href", widget: "string", pattern: ["^[0-9]+$", "Digits only"]}
+          - {label: "Email", name: "email", widget: "string"}
+          - {label: "Areas Served", name: "areas", widget: "list", field: {label: "Area", name: "area", widget: "string"}}
           - {label: "Hero Headline", name: "hero_headline", widget: "string"}
           - {label: "Hero Subheadline", name: "hero_subheadline", widget: "text"}
-          - {label: "Hero Offer", name: "hero_offer", widget: "string"}
-          - {label: "Badges", name: "badges", widget: "list", field: {label: "Text", name: "text", widget: "string"}}
+          - {label: "Hero Offer", name: "hero_offer", widget: "string", required: false}
           - {label: "Packages Summary Text", name: "service_summary", widget: "text"}
-          - {label: "Service Area Line", name: "service_area_line", widget: "string"}
           - {label: "Footer Line", name: "footer_line", widget: "string"}
 
   - label: "Packages"
