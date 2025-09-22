@@ -1,28 +1,36 @@
 {
   "images": [
     {
-      "image": "/uploads/banner.jpg",
-      "label": "Before/After"
+      "image": "/uploads/res9.jpg",
+      "label": "full service"
     },
     {
-      "image": "/uploads/logo.png",
+      "image": "/uploads/res5.jpg",
       "label": "Peaks"
     },
     {
-      "image": "/uploads/logo.png",
+      "image": "/uploads/res6.webp",
       "label": "Warm White"
     },
     {
-      "image": "/uploads/logo.png",
+      "image": "/uploads/res6.jpg",
       "label": "Color"
     },
     {
-      "image": "/uploads/logo.png",
+      "image": "/uploads/res1.jpg",
       "label": "Walkway"
     },
     {
-      "image": "/uploads/logo.png",
+      "image": "/uploads/res4.webp",
       "label": "Tree Wraps"
+    },
+    {
+      "image": "/uploads/res11.webp",
+      "label": "2 bay lights"
+    },
+    {
+      "image": "/uploads/res20.webp",
+      "label": "avondale"
     }
   ]
 }
