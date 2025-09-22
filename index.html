@@ -9,17 +9,17 @@
 
   <!-- security -->
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- social -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Western Holiday Lighting — Professional Christmas Light Installation" />
-  <meta property="og:description" content="Custom-fit C9 LEDs, pro design & safe installation. Serving Boise, Meridian, Nampa, Eagle, Kuna & Caldwell." />
-  <meta property="og:url" content="https://lightsidaho.com/" />
-  <meta property="og:image" content="https://lightsidaho.com/uploads/logo.png" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Western Holiday Lighting — Professional Christmas Light Installation">
+  <meta property="og:description" content="Custom-fit C9 LEDs, pro design & safe installation. Serving Boise, Meridian, Nampa, Eagle, Kuna & Caldwell.">
+  <meta property="og:url" content="https://lightsidaho.com/">
+  <meta property="og:image" content="https://lightsidaho.com/uploads/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <!-- icons (also avoids /favicon.ico 404) -->
+  <!-- icons -->
   <link rel="icon" type="image/png" href="/uploads/logo.png">
   <link rel="apple-touch-icon" href="/uploads/logo.png">
 
@@ -33,17 +33,20 @@
     :root{
       --bg:#0b1220; --bg2:#0f1a33; --text:#e5f0ff; --muted:#98a6bd;
       --card:#0e162b; --accent:#22d3ee; --xmasRed:#ef4444; --xmasGreen:#22c55e;
-
-      /* easy knobs */
-      --logo-desktop: 240px;      /* desktop logo height */
-      --logo-mobile-w: 70vw;      /* mobile logo width */
+      --logo-desktop: 240px;       /* desktop logo height */
+      --logo-mobile-w: 70vw;       /* mobile logo width */
       --h1-max: 44px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     a{color:var(--accent);text-decoration:none}
 
-    /* ===== Header (NOT sticky) ===== */
+    /* ===== Snow layer (full page, behind content) ===== */
+    .snow-global{position:fixed; inset:0; z-index:1; pointer-events:none}
+    /* everything else sits above snow */
+    header, main, footer{position:relative; z-index:2}
+
+    /* ===== Header (not sticky) ===== */
     .header{
       position:relative;
       background: #0a0f1c var(--header-bg, url('/uploads/banner.jpg')) center/cover no-repeat;
@@ -51,24 +54,25 @@
     }
     .header::after{
       content:""; position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.2) 40%, rgba(0,0,0,0) 100%);
+      background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.18) 45%, rgba(0,0,0,0) 100%);
       pointer-events:none;
     }
 
     .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
-    /* compact header row */
-    .nav{position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:8px 0 2px}
+    /* header row */
+    .nav{position:relative; z-index:3; display:flex; align-items:center; justify-content:space-between; padding:8px 0 2px}
     .logo-wrap{display:flex;align-items:center}
-    /* BIG logo, minimal cushion (trims transparent pixels) */
-    .logo{height:var(--logo-desktop); width:auto; display:block; margin: -38px 0;}
+    .logo{height:var(--logo-desktop); width:auto; display:block; margin:-38px 0} /* trims PNG transparent space */
+
+    /* center menu + right CTAs (like the original) */
+    .menu{display:flex; gap:16px; align-items:center; justify-content:center; margin:0 14px; flex:1}
+    .menu a{color:#cfe0ff; opacity:.9; font-weight:600; font-size:.95rem}
+    .menu a:hover{opacity:1; text-decoration:underline}
 
     .cta-row{display:flex;gap:12px;align-items:center}
     .btn{display:inline-block;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,var(--xmasRed),var(--xmasGreen));color:#052030;font-weight:800;letter-spacing:.3px;box-shadow:0 6px 18px rgba(239,68,68,.15),0 2px 8px rgba(34,197,94,.15)}
     .btn.outline{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15)}
-
-    /* Snow sits in header only (behind content) */
-    .snow-layer{position:absolute; inset:0; z-index:1; pointer-events:none;}
 
     /* ===== Main hero ===== */
     .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding:22px 0 36px}
@@ -93,40 +97,48 @@
     .bar{margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
     footer{padding:40px 0;color:#9db4d6}
 
-    /* ===== Floating CTA ===== */
-    .fab{position:fixed; right:24px; top:82px; z-index:10}
-    .fab .btn{border-radius:12px; padding:12px 16px; box-shadow:0 10px 24px rgba(0,0,0,.25)}
-
-    /* Mobile tweaks: bigger centered logo, hide header buttons, auto-place FAB below header */
+    /* ===== Responsive header ===== */
+    @media (max-width:980px){
+      .menu{gap:12px}
+      .menu a{font-size:.9rem}
+    }
     @media (max-width:780px){
       .logo{width:var(--logo-mobile-w);height:auto;margin:-62px 0}
-      .nav{flex-direction:column;align-items:center;gap:6px;padding:6px 0}
+      .nav{flex-direction:column;align-items:center;gap:8px;padding:6px 0}
       .logo-wrap{width:100%;justify-content:center}
-      .header .cta-row{display:none;}            /* header buttons hidden on mobile */
-      .fab{left:50%; right:auto; transform:translateX(-50%);} /* top is set by JS to sit below header */
+      .menu{order:3; flex-wrap:wrap; justify-content:center}
+      .cta-row{order:2}
     }
   </style>
 </head>
 <body>
+  <!-- Snow (full-page, behind everything) -->
+  <div class="snow-global" aria-hidden="true">
+    <canvas id="sn" width="1" height="1"></canvas>
+  </div>
+
   <!-- Header/Banner -->
   <header class="header">
-    <div class="snow-layer" aria-hidden="true">
-      <canvas id="sn" width="1" height="1"></canvas>
-    </div>
-
     <div class="container nav">
       <div class="logo-wrap">
         <img id="logo" class="logo" src="/uploads/logo.png" alt="Western Holiday Lighting logo">
       </div>
+
+      <!-- Section jump links -->
+      <nav class="menu" aria-label="Primary">
+        <a href="#gallery">Our Work</a>
+        <a href="#packages">Packages</a>
+        <a href="#faq">FAQ</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
+
+      <!-- Right side CTAs (original placement) -->
       <div class="cta-row">
         <a id="header_cta_label" class="btn outline" href="#quote">Get an Instant Estimate</a>
         <a id="header_cta_secondary" class="btn" href="tel:+12084093106">Call/Text (208) 409-3106</a>
       </div>
     </div>
   </header>
-
-  <!-- Floating CTA -->
-  <div class="fab"><a class="btn outline" href="#quote">Get an Instant Estimate</a></div>
 
   <main class="container">
     <section class="hero">
@@ -163,9 +175,9 @@
       <div id="packages_wrap" class="grid cols-3"></div>
     </section>
 
-    <section class="section">
+    <section class="section" id="gallery">
       <h2>Recent Work</h2>
-      <div id="gallery" class="gallery"></div>
+      <div id="gallery_grid" class="gallery"></div>
     </section>
 
     <section id="faq" class="section">
@@ -173,7 +185,7 @@
       <div id="faq_wrap" class="grid cols-3"></div>
     </section>
 
-    <section class="section">
+    <section id="reviews" class="section">
       <h2>What Neighbors Say</h2>
       <div id="testimonials" class="grid cols-3"></div>
     </section>
@@ -201,7 +213,6 @@
       const gal   = await j('/content/gallery.json');
 
       if(site){
-        // apply CMS content
         $('business_name_footer').textContent = site.business_name || 'Western Holiday Lighting';
         if (site.logo) $('logo').setAttribute('src', site.logo);
         if (site.header_bg) document.querySelector('.header').style.setProperty('--header-bg', `url(${site.header_bg})`);
@@ -230,7 +241,7 @@
       }
 
       if(gal && Array.isArray(gal.images)){
-        document.getElementById('gallery').innerHTML = gal.images.map(it => `
+        document.getElementById('gallery_grid').innerHTML = gal.images.map(it => `
           <figure title="${it.label||''}">
             ${it.image ? `<img src="${it.image}" alt="${it.label||'Gallery'}">` : it.label||'Image'}
           </figure>`).join('');
@@ -245,48 +256,48 @@
       }
 
       $('y').textContent = new Date().getFullYear();
-
-      // place the floating CTA so it NEVER overlaps the logo on mobile
-      function placeFab(){
-        const fab = document.querySelector('.fab');
-        const header = document.querySelector('.header');
-        const mobile = window.matchMedia('(max-width:780px)').matches;
-        if (!fab) return;
-        if (mobile){
-          const h = header ? header.offsetHeight : 140;      // read actual header height
-          fab.style.top = (h + 12) + 'px';                   // sit just below it
-          fab.style.left = '50%';
-          fab.style.right = 'auto';
-          fab.style.transform = 'translateX(-50%)';
-        } else {
-          fab.style.top = '82px';
-          fab.style.right = '24px';
-          fab.style.left = '';
-          fab.style.transform = '';
-        }
-      }
-      placeFab();
-      addEventListener('resize', placeFab);
     }
     init();
 
-    // light snow in header, fades out and stops ~10s
+    /* Snow across whole page, slower + fades out ~10s.
+       Sits behind content because canvas is z-index:1 and cards/sections are above. */
     (function snow(){
       const c = document.getElementById('sn');
-      const layer = c.parentElement, ctx = c.getContext('2d');
-      function size(){ c.width = layer.clientWidth; c.height = layer.clientHeight; }
-      size(); new ResizeObserver(size).observe(layer);
-      let flakes = [], t = 0;
-      function add(){ for(let i=0;i<16;i++) flakes.push({x:Math.random()*c.width,y:-10-Math.random()*c.height*.2,r:1+Math.random()*2.8,s:.7+Math.random()*1.5,d:(Math.random()*.8-.4)}) }
-      add(); const addInt = setInterval(add,700);
-      let raf;
-      (function step(){ ctx.clearRect(0,0,c.width,c.height); ctx.fillStyle="rgba(255,255,255,.9)";
-        flakes.forEach(f=>{ f.y+=f.s; f.x+=Math.sin((t+f.y)/60)*.4+f.d; ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,6.283); ctx.fill();});
-        flakes = flakes.filter(f=>f.y < c.height+8); t++; raf=requestAnimationFrame(step);
+      const ctx = c.getContext('2d');
+      function size(){ c.width = innerWidth; c.height = innerHeight; }
+      size(); addEventListener('resize', size);
+
+      let flakes = [];
+      function make(n){
+        for(let i=0;i<n;i++){
+          flakes.push({
+            x: Math.random()*c.width,
+            y: Math.random()*-c.height*0.2 - 10,
+            r: 1 + Math.random()*2.6,
+            s: 0.25 + Math.random()*0.75,            // slower fall speed
+            drift: (Math.random()*0.6-0.3)
+          });
+        }
+      }
+      make(120);
+      const adder = setInterval(()=>make(36), 1100); // gentle waves
+
+      let t=0, raf;
+      (function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        ctx.fillStyle="rgba(255,255,255,.9)";
+        for(const f of flakes){
+          f.y += f.s;
+          f.x += Math.sin((t+f.y)/80)*0.35 + f.drift;
+          ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,6.283); ctx.fill();
+        }
+        flakes = flakes.filter(f=>f.y < c.height+8);
+        t++; raf=requestAnimationFrame(step);
       })();
-      setTimeout(()=>clearInterval(addInt), 9000);
-      setTimeout(()=>{ layer.style.transition="opacity .8s"; layer.style.opacity="0"; }, 10000);
-      setTimeout(()=>{ cancelAnimationFrame(raf); ctx.clearRect(0,0,c.width,c.height); }, 10850);
+
+      setTimeout(()=>clearInterval(adder), 9000);           // stop adding after 9s
+      setTimeout(()=>{ c.style.transition="opacity .8s"; c.style.opacity="0"; }, 10500);
+      setTimeout(()=>{ cancelAnimationFrame(raf); ctx.clearRect(0,0,c.width,c.height); }, 11500);
     })();
 
     // CMS invite redirect + login handoff
