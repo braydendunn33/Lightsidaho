@@ -7,7 +7,7 @@
   to   = "/static/uploads/:splat"
   status = 200
 
-# Force HTTPS
+# Force HTTPS (fixes “Not secure” + mixed content)
 [[redirects]]
   from = "http://lightsidaho.com/*"
   to   = "https://lightsidaho.com/:splat"
@@ -20,7 +20,7 @@
   to   = "/success/"
   status = 301
 
-# Security headers
+# Security headers (HSTS, etc.)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -30,3 +30,9 @@
     X-Frame-Options = "SAMEORIGIN"
     X-XSS-Protection = "0"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Long-cache uploads (optional; safe if you replace files with new names)
+[[headers]]
+  for = "/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
