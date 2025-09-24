@@ -1,31 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>CMS | Western Holiday Lighting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Netlify Identity (login) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Decap (Netlify) CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Content Manager</title>
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <style>
-    html,body{height:100%}
-    body{margin:0;background:#0b1220;color:#e5f0ff;font-family:system-ui,Inter,Arial,sans-serif}
-    /* optional: match your brand */
-    .cms-logo img { max-height: 36px }
+    html,body{height:100%;margin:0}
+    body{background:#0b1220;color:#e5f0ff;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .wrap{display:flex;align-items:center;justify-content:center;height:100%}
+    .card{padding:24px 28px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .muted{color:#9db4d6}
   </style>
 </head>
 <body>
-  <!-- The CMS mounts itself automatically and reads /admin/config.yml -->
+  <div class="wrap">
+    <div class="card">
+      <div class="muted">Loading CMS… If this screen doesn’t change in a few seconds, hard-refresh (Cmd/Ctrl+Shift+R).</div>
+    </div>
+  </div>
+
+  <!-- Netlify Identity (login) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Netlify CMS app -->
+  <script src="https://unpkg.com/netlify-cms@^2.0/dist/netlify-cms.js"></script>
+
   <script>
-    // If an invite link lands here, Identity should initialize and keep you on /admin/
+    // Optional: send invited users to /admin/ after they accept
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', (user) => {
+      window.netlifyIdentity.on('init', user => {
         if (!user) {
-          window.netlifyIdentity.on('login', () => { document.location.reload(); });
+          window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
         }
       });
     }
