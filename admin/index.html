@@ -22,13 +22,14 @@
 
   <!-- Netlify Identity (login) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <!-- Netlify CMS app -->
-  <script src="https://unpkg.com/netlify-cms@^2.0/dist/netlify-cms.js"></script>
+
+  <!-- CMS app (pin to Decap CMS v3; very reliable) -->
+  <script src="https://unpkg.com/decap-cms@3.3.0/dist/decap-cms.js"></script>
 
   <script>
-    // Optional: send invited users to /admin/ after they accept
+    // Identity: after login, return to /admin
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', user => {
+      window.netlifyIdentity.on('init', (user) => {
         if (!user) {
           window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
         }
