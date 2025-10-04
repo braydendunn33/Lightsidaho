@@ -165,21 +165,36 @@
     .bar{margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
     footer{padding:40px 0;color:#9db4d6;position:relative;z-index:1}
 
-    /* ===== Responsive header ===== */
-    @media (max-width:980px){ .topnav{gap:12px} .topnav a{font-size:.9rem} }
-    @media (max-width:780px){
-      .logo{width:var(--logo-mobile-w);height:auto;margin:-62px 0}
-      .nav{flex-direction:column;align-items:center;gap:8px;padding:6px 0}
-      .logo-wrap{width:100%;justify-content:center}
-      .cta-row{display:none}                 /* hide header buttons on mobile to avoid crowding */
-      .mobile-cta{display:flex; flex-direction:column;}
-      /* slightly softer vignette on phones */
-      :root{
-        --header-vignette-opacity:.5;
-        --header-vignette-radius:66vw;
-        --header-vignette-y:44%;
-      }
-    }
+   /* ===== Responsive header ===== */
+@media (max-width:980px){
+  .topnav{gap:12px}
+  .topnav a{font-size:.9rem}
+}
+
+@media (max-width:780px){
+  .logo{width:var(--logo-mobile-w);height:auto;margin:-62px 0}
+  .nav{flex-direction:column;align-items:center;gap:8px;padding:6px 0}
+  .logo-wrap{width:100%;justify-content:center}
+
+  /* only hide the HEADER buttons on mobile (not the form submit) */
+  .nav .cta-row{display:none}
+
+  .mobile-cta{display:flex; flex-direction:column;}
+
+  /* slightly softer vignette on phones */
+  :root{
+    --header-vignette-opacity:.5;
+    --header-vignette-radius:66vw;
+    --header-vignette-y:44%;
+  }
+}
+
+/* keep the FORM buttons visible and stacked on phones */
+@media (max-width:780px){
+  .card .cta-row{display:flex; flex-direction:column; gap:10px}
+  .card .cta-row .btn{width:100%; text-align:center}
+}
+
   </style>
 </head>
 <body>
