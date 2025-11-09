@@ -164,9 +164,13 @@
         <h2 id="quote">Instant Estimate</h2>
         <p class="muted">Text us your address and a photo of the front of your home for a fast quote, or use this form.</p>
 
-        <!-- IMPORTANT: names here map to the JSON keys below -->
-        <form name="quote" method="POST" data-netlify="true" action="/success/">
+        <!-- Netlify-handled form. No JS submit. -->
+        <form name="quote" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/success/">
           <input type="hidden" name="form-name" value="quote" />
+          <p style="display:none">
+            <label>Don’t fill this out if you're human: <input name="bot-field" /></label>
+          </p>
+
           <label>Full Name<input name="name" required autocomplete="name"></label>
           <label>Email (optional)<input name="email" type="email" autocomplete="email" placeholder="you@example.com"></label>
           <label>Mobile Number<input name="phone" type="tel" required autocomplete="tel"></label>
@@ -296,7 +300,7 @@
     }
     init();
 
-    // ===== Snow animation (unchanged) =====
+    // Snow (unchanged)
     function startSnow(canvas, opts){
       const ctx = canvas.getContext('2d');
       function size(){ canvas.width = innerWidth; canvas.height = opts.height || innerHeight; }
@@ -348,65 +352,13 @@
       startSnow(cBg, { rMin:1, rMax:2.4, speedMin:.25, speedMax:.8, initial:60, trickle:15 });
     });
 
-    // CMS invite redirect + login handoff (unchanged)
+    // CMS invite redirect + login handoff
     if (location.hash && location.hash.startsWith('#/invite')) location.href = '/admin/' + location.hash;
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', (user) => {
-        if (!user) window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
+        if (!user) window.netlifyIdentity.on('login', () => { document.location.href = '/admin/');
       });
     }
-  </script>
-
-  <!-- === Zapier webhook submit === -->
-  <script>
-    const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/4234378/us74gip/'; // <- REPLACE
-
-    // Prefer DOMContentLoaded so it works even if this script is above </body>
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.querySelector('form[name="quote"]');
-      if (!form) return;
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const fd = new FormData(form);
-        const payload = {
-          full_name:       fd.get('name')   || '',
-          email:           fd.get('email')  || '',
-          phone_number:    fd.get('phone')  || '',
-          street_address:  fd.get('address')|| '',
-          stories:         fd.get('stories')|| '',
-          extras:          fd.get('extras') || '',
-          notes:           fd.get('notes')  || '',
-          source:         'Website Form',
-          page_url:        window.location.href,
-          submitted_at:    new Date().toISOString()
-        };
-
-        // Debug in console while testing
-        console.log('Posting to Zapier:', payload);
-
-        try {
-          const resp = await fetch(ZAPIER_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          const text = await resp.text();
-          console.log('Zapier response:', resp.status, text);
-
-          alert("Thanks! We'll text you a fast estimate.");
-          form.reset();
-
-          // Fallback: if you want Netlify to also receive it for backup, uncomment next line
-          // form.submit();
-        } catch (err) {
-          console.error('Zap post failed:', err);
-          alert("Something went wrong. Please text us at (208) 409-3106.");
-        }
-      });
-    });
   </script>
 </body>
 </html>
