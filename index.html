@@ -430,5 +430,46 @@
       });
     }
   </script>
+<script>
+  // ---- CONFIG ----
+  const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/XXXXXXXXX/XXXXXXXXX/'; // <-- replace
+
+  // Attach to the existing form
+  const form = document.querySelector('form[name="quote"]');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // collect fields already on your page
+      const fd = new FormData(form);
+      const payload = {
+        full_name: fd.get('name') || '',
+        phone_number: fd.get('phone') || '',
+        email: fd.get('email') || '',               // add an Email input if you want it
+        street_address: fd.get('address') || '',
+        stories: fd.get('stories') || '',
+        extras: fd.get('extras') || '',
+        notes: fd.get('notes') || '',
+        source: 'Website Form',
+        page_url: window.location.href,
+        submitted_at: new Date().toISOString()
+      };
+
+      try {
+        await fetch(ZAPIER_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        alert("Thanks! We'll text you a fast estimate.");
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        alert("Something went wrong. Please text us at (208) 409-3106.");
+      }
+    });
+  }
+</script>
 </body>
 </html>
