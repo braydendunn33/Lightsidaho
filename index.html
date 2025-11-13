@@ -353,10 +353,17 @@
     });
 
     // CMS invite redirect + login handoff
-    if (location.hash && location.hash.startsWith('#/invite')) location.href = '/admin/' + location.hash;
+    if (location.hash && location.hash.startsWith('#/invite')) {
+      location.href = '/admin/' + location.hash;
+    }
+
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', (user) => {
-        if (!user) window.netlifyIdentity.on('login', () => { document.location.href = '/admin/');
+        if (!user) {
+          window.netlifyIdentity.on('login', () => {
+            document.location.href = '/admin/';
+          });
+        }
       });
     }
   </script>
